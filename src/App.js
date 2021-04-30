@@ -1,12 +1,12 @@
-import NavBar from './components/Navbar'
+import NavBar from './components/navigation/Navbar'
 import { Switch, Route } from 'react-router-dom'
 import home from './pages/Home'
 import login from './pages/Login'
-import './App.css';
+import styles from './styles.js';
 
 function App() {
   return (
-    <div className="App">
+    <div style={styles.app}>
       <header>
         <NavBar></NavBar>
       </header>

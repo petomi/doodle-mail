@@ -1,7 +1,8 @@
+import styles from '../styles.js';
 export default function Home () {
   return (
-    <div className="App-splash">
-      <h1>Home Page placeholder</h1>
+    <div style={styles.homePage}>
+      <h1 style={{color: 'white'}}>Home Page placeholder</h1>
     </div>
   )
 }
