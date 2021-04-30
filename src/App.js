@@ -1,10 +1,10 @@
 import NavBar from './components/Navbar'
 import { Switch, Route } from 'react-router-dom'
 import home from './pages/Home'
+import login from './pages/Login'
 import './App.css';
 
 function App() {
-  const login = () => { return <h1>Login Page</h1>}
   return (
     <div className="App">
       <header>
