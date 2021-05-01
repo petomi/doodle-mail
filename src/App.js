@@ -1,10 +1,11 @@
 import NavBar from './components/navigation/Navbar'
 import { useSelector, useDispatch } from 'react-redux'
-import { hideAlert } from './features/alert/alertSlice'
+import { hideAlert } from './features/alerts/alertSlice'
 import { Switch, Route } from 'react-router-dom'
 import { Alert, AlertIcon, AlertDescription, CloseButton } from '@chakra-ui/react'
 import home from './pages/Home'
-import login from './pages/Login'
+import join from './pages/Join'
+import create from './pages/Create'
 import styles from './styles.js';
 
 function App() {
@@ -17,7 +18,8 @@ function App() {
       </header>
       <Switch>
         <Route exact path="/" component={home}/>
-        <Route path="/login" component={login}/>
+        <Route path="/join" component={join}/>
+        <Route path="/create" component={create}/>
       </Switch>
     </div>
   );

@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 export const alertSlice = createSlice({
-  name: 'alert',
+  name: 'alerts',
   initialState: {
     alerts: [],
   },

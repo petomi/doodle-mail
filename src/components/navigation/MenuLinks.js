@@ -1,9 +1,10 @@
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Box, Stack } from '@chakra-ui/react'
 import MenuItem from './MenuItem'
+import { setCurrentRoomCode } from '../../features/user/userSlice'
 
 export default function MenuLinks({ isOpen }) {
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
+  const currentRoomCode = useSelector((state) => state.user.currentRoomCode)
   return (
     <Box
       display={{ base: isOpen ? "block" : "none", md: "block" }}
@@ -16,18 +17,18 @@ export default function MenuLinks({ isOpen }) {
         direction={["column", "row", "row", "row"]}
         pt={[4, 4, 0, 0]}
       >
-        <MenuItem to="/">Home</MenuItem>
-        <LoginLogoutButton isLoggedIn={isLoggedIn} />
+        <MenuItem to="/create">Create Room</MenuItem>
+        <JoinRoomButton isInRoom={currentRoomCode != null} />
       </Stack>
     </Box>
   )
 }
 
-const LoginLogoutButton = ({ isLoggedIn }) => {
-  if (isLoggedIn) {
-    // TODO: log out when this route is hit.
-    return <MenuItem to="/logout" colorScheme="blue">Logout</MenuItem>
+const JoinRoomButton = ({ isInRoom }) => {
+  const dispatch = useDispatch()
+  if (isInRoom) {
+    return <MenuItem colorScheme="blue" onClick={dispatch(setCurrentRoomCode(null))}>Leave Room</MenuItem>
   } else {
-    return <MenuItem to="/login" colorScheme="blue">Login</MenuItem>
+    return <MenuItem to="/join" colorScheme="blue">Join Room</MenuItem>
   }
 }

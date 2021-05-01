@@ -3,7 +3,6 @@ import { NavLink, withRouter } from 'react-router-dom'
 
 const MenuItem = ({children, isLast, to = "/", colorScheme, ...rest }) => {
   return (
-
     <NavLink exact to={to}>
       <Button
         colorScheme={colorScheme}
