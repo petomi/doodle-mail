@@ -1,14 +1,19 @@
 import NavBar from './components/navigation/Navbar'
+import { useSelector, useDispatch } from 'react-redux'
+import { hideAlert } from './store/appdataSlice'
 import { Switch, Route } from 'react-router-dom'
+import { Alert, AlertIcon, AlertDescription, CloseButton } from '@chakra-ui/react'
 import home from './pages/Home'
 import login from './pages/Login'
 import styles from './styles.js';
 
 function App() {
+  const alerts = useSelector((state) => state.appdata.alerts)
   return (
     <div style={styles.app}>
       <header>
-        <NavBar></NavBar>
+        <NavBar />
+        <AlertsBar alerts={alerts} />
       </header>
       <Switch>
         <Route exact path="/" component={home}/>
@@ -16,6 +21,25 @@ function App() {
       </Switch>
     </div>
   );
+}
+
+const AlertsBar = ({ alerts }) => {
+  const dispatch = useDispatch()
+  if (alerts.length > 0) {
+    alerts.forEach((alert, index) => {
+      return (
+        <Alert status={alert.status}>
+          <AlertIcon />
+          <AlertDescription>{alert.description}</AlertDescription>
+          <CloseButton position="absolute" right="8px" top="8px" onClick={() => dispatch(hideAlert(index))} />
+        </Alert>
+      )
+    })
+  }
+  else {
+    return null
+  }
+
 }
 
 export default App;

@@ -1,11 +1,9 @@
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { Box, Stack } from '@chakra-ui/react'
-import { setLoggedIn } from '../../store/appdataSlice'
 import MenuItem from './MenuItem'
 
 export default function MenuLinks({ isOpen }) {
   const isLoggedIn = useSelector((state) => state.appdata.isLoggedIn)
-  const dispatch = useDispatch()
   return (
     <Box
       display={{ base: isOpen ? "block" : "none", md: "block" }}
@@ -20,8 +18,6 @@ export default function MenuLinks({ isOpen }) {
       >
         <MenuItem to="/">Home</MenuItem>
         <LoginLogoutButton isLoggedIn={isLoggedIn} />
-        {/* TODO: remove the test div below and move setting login to somewhere better. */}
-        <div onClick={() => dispatch(setLoggedIn(!isLoggedIn))}>TOGGLE LOGIN</div>
       </Stack>
     </Box>
   )
@@ -29,6 +25,7 @@ export default function MenuLinks({ isOpen }) {
 
 const LoginLogoutButton = ({ isLoggedIn }) => {
   if (isLoggedIn) {
+    // TODO: log out when this route is hit.
     return <MenuItem to="/logout" colorScheme="blue">Logout</MenuItem>
   } else {
     return <MenuItem to="/login" colorScheme="blue">Login</MenuItem>

@@ -8,14 +8,17 @@ export const appdataSlice = createSlice({
     lastSyncDate: null
   },
   reducers: {
+    hideAlert: (state, index) => {
+      state.alerts.splice(index.payload, 1)
+    },
     hideAlerts: (state) => {
       state.alerts = []
     },
     showAlert: (state, alert) => {
       state.alerts = []
       state.alerts.push({
-        text: alert.payload.text,
-        type: alert.payload.type
+        text: alert.payload.description,
+        type: alert.payload.status
       })
     },
     setLoggedIn: (state, loggedIn) => {
@@ -27,6 +30,6 @@ export const appdataSlice = createSlice({
   }
 })
 
-export const { hideAlerts, showAlert, setLoggedIn, updateLastSyncDate } = appdataSlice.actions
+export const { hideAlert, hideAlerts, showAlert, setLoggedIn, updateLastSyncDate } = appdataSlice.actions
 
 export default appdataSlice.reducer
