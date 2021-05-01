@@ -17,7 +17,6 @@ export default function MenuLinks({ isOpen }) {
         direction={["column", "row", "row", "row"]}
         pt={[4, 4, 0, 0]}
       >
-        <MenuItem to="/create">Create Room</MenuItem>
         <JoinRoomButton isInRoom={currentRoomCode != null} />
       </Stack>
     </Box>

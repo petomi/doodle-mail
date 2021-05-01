@@ -5,7 +5,6 @@ import { Switch, Route } from 'react-router-dom'
 import { Alert, AlertIcon, AlertDescription, CloseButton } from '@chakra-ui/react'
 import home from './pages/Home'
 import join from './pages/Join'
-import create from './pages/Create'
 import styles from './styles.js';
 
 function App() {
@@ -19,7 +18,6 @@ function App() {
       <Switch>
         <Route exact path="/" component={home}/>
         <Route path="/join" component={join}/>
-        <Route path="/create" component={create}/>
       </Switch>
     </div>
   );

@@ -1,12 +1,12 @@
 import React from 'react'
 import { useInput } from '../hooks/useInput'
-import { Button, Input, InputGroup } from '@chakra-ui/react'
+import { Button, Input, FormControl, FormLabel, Stack } from '@chakra-ui/react'
 
-export default function Login () {
+export default function Join () {
   const { value:name, bind:bindName, reset:resetName } = useInput('')
   const { value:room, bind:bindRoom, reset:resetRoom } = useInput('')
   const handleSubmit = (evt) => {
-    // TODO - call api to get JWT for login somehow and set isLoggedIn in redux state
+    // TODO: pop up join dialogue ("have a room code?" input, or smaller "create room" button below, then step 2 is "enter your name")
     evt.preventDefault()
     alert(`Submitting name: ${name} room: ${room}`)
     resetName()
@@ -15,25 +15,29 @@ export default function Login () {
   return (
     <>
     {/*TODO: make this pretty */}
-    <InputGroup size="md">
-      Name: {name}
-      Room Code: {room}
-      <Input
-        pr="4.5rem"
-        type="text"
-        placeholder="Enter name"
-        {...bindName}
-      />
-      <Input
-        pr="4.5rem"
-        type="text"
-        placeholder="Enter room code"
-        {...bindRoom}
-      />
-    </InputGroup>
-    <Button onClick={handleSubmit}>
-      Login
-    </Button>
+    <Stack spacing={3}>
+      <FormControl id="first-name" isRequired>
+        <FormLabel>Your Name</FormLabel>
+        <Input
+          pr="4.5rem"
+          type="text"
+          placeholder="Enter name"
+          {...bindName}
+        />
+      </FormControl>
+      <FormControl id="first-name" isRequired>
+        <FormLabel>Have a room code?</FormLabel>
+        <Input
+          pr="4.5rem"
+          type="text"
+          placeholder="Enter room code"
+          {...bindRoom}
+        />
+      </FormControl>
+      <Button onClick={handleSubmit}>
+        Login
+      </Button>
+    </Stack>
     </>
   )
 }
