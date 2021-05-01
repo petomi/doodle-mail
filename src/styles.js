@@ -7,7 +7,6 @@ const app = {
 
 const homePage = {
   backgroundColor: '#1565C0',
-  minHeight: '90vh',
   height: '100%',
   display: 'flex',
   flexDirection: 'column',
