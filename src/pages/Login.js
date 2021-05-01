@@ -2,10 +2,10 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useInput } from '../hooks/useInput'
 import { Button, Input, InputGroup, InputRightElement } from '@chakra-ui/react'
-import { setLoggedIn } from '../store/appdataSlice'
+import { setLoggedIn } from '../features/auth/authSlice'
 
 export default function Login () {
-  const isLoggedIn = useSelector((state) => state.appdata.isLoggedIn)
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
   const dispatch = useDispatch()
   const { value:email, bind:bindEmail, reset:resetEmail } = useInput('')
   const { value:password, bind:bindPassword, reset:resetPassword } = useInput('')

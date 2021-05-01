@@ -1,8 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit'
-import appdataReducer from './appdataSlice'
+import authReducer from '../features/auth/authSlice'
+import alertReducer from '../features/alert/alertSlice'
 
 export default configureStore({
   reducer: {
-    appdata: appdataReducer
+    alert: alertReducer,
+    auth: authReducer,
   }
 })

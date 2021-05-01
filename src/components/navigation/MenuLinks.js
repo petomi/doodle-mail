@@ -3,7 +3,7 @@ import { Box, Stack } from '@chakra-ui/react'
 import MenuItem from './MenuItem'
 
 export default function MenuLinks({ isOpen }) {
-  const isLoggedIn = useSelector((state) => state.appdata.isLoggedIn)
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
   return (
     <Box
       display={{ base: isOpen ? "block" : "none", md: "block" }}

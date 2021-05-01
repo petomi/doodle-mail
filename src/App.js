@@ -1,6 +1,6 @@
 import NavBar from './components/navigation/Navbar'
 import { useSelector, useDispatch } from 'react-redux'
-import { hideAlert } from './store/appdataSlice'
+import { hideAlert } from './features/alert/alertSlice'
 import { Switch, Route } from 'react-router-dom'
 import { Alert, AlertIcon, AlertDescription, CloseButton } from '@chakra-ui/react'
 import home from './pages/Home'
@@ -8,7 +8,7 @@ import login from './pages/Login'
 import styles from './styles.js';
 
 function App() {
-  const alerts = useSelector((state) => state.appdata.alerts)
+  const alerts = useSelector((state) => state.alerts.alerts)
   return (
     <div style={styles.app}>
       <header>
