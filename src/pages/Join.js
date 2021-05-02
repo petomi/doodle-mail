@@ -1,6 +1,7 @@
 import React from 'react'
+import styles from '../styles.js'
 import { useInput } from '../hooks/useInput'
-import { Button, Input, FormControl, FormLabel, Stack } from '@chakra-ui/react'
+import { Button, Center, FormControl, FormLabel, Input, Stack } from '@chakra-ui/react'
 
 export default function Join () {
   const { value:name, bind:bindName, reset:resetName } = useInput('')
@@ -15,29 +16,32 @@ export default function Join () {
   return (
     <>
     {/*TODO: make this pretty */}
-    <Stack spacing={3}>
-      <FormControl id="first-name" isRequired>
-        <FormLabel>Your Name</FormLabel>
-        <Input
-          pr="4.5rem"
-          type="text"
-          placeholder="Enter name"
-          {...bindName}
-        />
-      </FormControl>
-      <FormControl id="first-name" isRequired>
-        <FormLabel>Have a room code?</FormLabel>
-        <Input
-          pr="4.5rem"
-          type="text"
-          placeholder="Enter room code"
-          {...bindRoom}
-        />
-      </FormControl>
-      <Button onClick={handleSubmit}>
-        Login
-      </Button>
-    </Stack>
+    <Center bg="#6200EE" style={styles.pageBackground}>
+      <Stack spacing={3}>
+        <FormControl id="first-name" isRequired>
+          <FormLabel>Your Name</FormLabel>
+          <Input
+            pr="4.5rem"
+            type="text"
+            placeholder="Enter name"
+            {...bindName}
+          />
+        </FormControl>
+        <FormControl id="first-name" isRequired>
+          <FormLabel>Have a room code?</FormLabel>
+          <Input
+            pr="4.5rem"
+            type="text"
+            placeholder="Enter room code"
+            {...bindRoom}
+          />
+        </FormControl>
+        <Button color="black" onClick={handleSubmit}>
+          Login
+        </Button>
+      </Stack>
+    </Center>
+
     </>
   )
 }

@@ -5,13 +5,8 @@ const app = {
   flexDirection: 'column'
 }
 
-const homePage = {
-  backgroundColor: '#1565C0',
+const pageBackground = {
   height: '100%',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
   fontSize: 'calc(10px + 2vmin)',
   color: 'white'
 }
@@ -22,7 +17,7 @@ const appLink = {
 
 const styles = {
   app,
-  homePage,
+  pageBackground,
   appLink
 }
 

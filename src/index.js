@@ -1,17 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom'
-import './index.css';
 import { ChakraProvider } from "@chakra-ui/react"
 import store from './store/store'
 import { Provider } from 'react-redux'
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import "@fontsource/fredericka-the-great/400.css"
+import "@fontsource/fredoka-one/400.css"
+import theme from "./theme"
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <ChakraProvider>
+      <ChakraProvider theme={theme}>
         <BrowserRouter>
           <App />
         </BrowserRouter>

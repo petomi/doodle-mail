@@ -6,6 +6,8 @@
     "@chakra-ui/react": "^1.6.0",
     "@emotion/react": "11",
     "@emotion/styled": "11",
+    "@fontsource/fredericka-the-great": "^4.2.2",
+    "@fontsource/fredoka-one": "^4.2.2",
     "@reduxjs/toolkit": "^1.5.1",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
