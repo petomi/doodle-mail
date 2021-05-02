@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { Box, Stack } from '@chakra-ui/react'
 import MenuItem from './MenuItem'
-import { setCurrentRoomCode } from '../../features/user/userSlice'
+import { setCurrentRoomCode } from '../user/userSlice'
 
 export default function MenuLinks({ isOpen }) {
   const currentRoomCode = useSelector((state) => state.user.currentRoomCode)

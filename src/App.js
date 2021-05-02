@@ -1,4 +1,4 @@
-import NavBar from './components/navigation/Navbar'
+import NavBar from './features/navigation/Navbar'
 import { useSelector, useDispatch } from 'react-redux'
 import { hideAlert } from './features/alerts/alertSlice'
 import { Switch, Route } from 'react-router-dom'
