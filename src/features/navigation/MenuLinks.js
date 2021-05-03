@@ -1,10 +1,10 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { Box, Stack } from '@chakra-ui/react'
 import MenuItem from './MenuItem'
-import { setCurrentRoomCode } from '../rooms/roomSlice'
+import { setRoomCode } from '../rooms/roomSlice'
 
 export default function MenuLinks({ isOpen }) {
-  const currentRoomCode = useSelector((state) => state.room.currentRoomCode)
+  const roomCode = useSelector((state) => state.room.roomCode)
   return (
     <Box
       display={{ base: isOpen ? "block" : "none", md: "block" }}
@@ -17,7 +17,7 @@ export default function MenuLinks({ isOpen }) {
         direction={["column", "row", "row", "row"]}
         pt={[4, 4, 0, 0]}
       >
-        <JoinRoomButton isInRoom={currentRoomCode != null} />
+        <JoinRoomButton isInRoom={roomCode != null} />
       </Stack>
     </Box>
   )
@@ -26,7 +26,7 @@ export default function MenuLinks({ isOpen }) {
 const JoinRoomButton = ({ isInRoom }) => {
   const dispatch = useDispatch()
   if (isInRoom) {
-    return <MenuItem colorScheme="blue" onClick={dispatch(setCurrentRoomCode(null))}>Leave Room</MenuItem>
+    return <MenuItem colorScheme="blue" onClick={dispatch(setRoomCode(null))}>Leave Room</MenuItem>
   } else {
     return <MenuItem to="/join" colorScheme="blue">Join Room</MenuItem>
   }
