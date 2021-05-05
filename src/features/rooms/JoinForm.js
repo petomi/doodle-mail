@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, FormControl, FormLabel, Input, InputGroup, InputRightElement, Stack } from '@chakra-ui/react'
+import { Button, FormControl, FormLabel, Input, InputGroup, InputRightElement, Stack, Link } from '@chakra-ui/react'
 import { FaArrowRight } from 'react-icons/fa'
 import { useInput } from '../../hooks/useInput'
 
@@ -23,6 +23,10 @@ const JoinForm = () => {
     setFormStage(1)
   }
 
+  const goToPrevStage = () => {
+    setFormStage(1)
+  }
+
   const goToNextStage = () => {
     // TODO: check if requested room exists? if not show error message?
     setFormStage(2)
@@ -39,6 +43,7 @@ const JoinForm = () => {
               type="text"
               variant="filled"
               placeholder="Type room code, then press enter."
+              onKeyPress={(e) => { if (e.key === 'Enter') goToNextStage(e) }}
               {...bindRoom}
             />
             <InputRightElement>
@@ -63,7 +68,9 @@ const JoinForm = () => {
             <Input
               pr="4.5rem"
               type="text"
+              variant="filled"
               placeholder="Enter name"
+              onKeyPress={(e) => { if (e.key === 'Enter') handleSubmit(e) }}
               {...bindName}
             />
             <InputRightElement>
@@ -72,6 +79,8 @@ const JoinForm = () => {
               </Button>
             </InputRightElement>
           </InputGroup>
+          <br/>
+          <Link fontSize={["sm", "m"]} onClick={goToPrevStage}>Take me back!</Link>
         </FormControl>
       </Stack>
     )
