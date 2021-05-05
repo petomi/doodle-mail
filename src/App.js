@@ -5,6 +5,7 @@ import { Switch, Route } from 'react-router-dom'
 import { Alert, AlertIcon, AlertDescription, CloseButton } from '@chakra-ui/react'
 import home from './pages/Home'
 import join from './pages/Join'
+import room from './pages/Room'
 import styles from './styles.js';
 
 function App() {
@@ -18,16 +19,18 @@ function App() {
       <Switch>
         <Route exact path="/" component={home}/>
         <Route path="/join" component={join}/>
+        <Route path="/room" component={room}/>
       </Switch>
     </div>
-  );
+  )
 }
 
 const AlertsBar = ({ alerts }) => {
   const dispatch = useDispatch()
+  let bar = null
   if (alerts.length > 0) {
     alerts.forEach((alert, index) => {
-      return (
+      bar = (
         <Alert status={alert.status}>
           <AlertIcon />
           <AlertDescription>{alert.description}</AlertDescription>
@@ -36,10 +39,7 @@ const AlertsBar = ({ alerts }) => {
       )
     })
   }
-  else {
-    return null
-  }
-
+  return bar
 }
 
 export default App;

@@ -7,7 +7,7 @@ const baseUrl = 'https://doodle-mail-server.herokuapp.com'
 // TODO: may not need this endpoint
 export const getRoomInfo = createAsyncThunk('room/getInfo', async ({roomCode}, thunkApi) => {
   const response = await axios.get(`${baseUrl}/rooms/${roomCode}/info`)
-  if (response.ok) {
+  if (response.status === 200) {
     return response.data
   } else {
     return thunkApi.rejectWithValue({
@@ -18,7 +18,7 @@ export const getRoomInfo = createAsyncThunk('room/getInfo', async ({roomCode}, t
 
 export const createRoom = createAsyncThunk('room/create', async ({userName}, thunkApi) => {
   const response = await axios.post(`${baseUrl}/rooms`, { userName: userName })
-  if (response.ok) {
+  if (response.status === 200) {
     return response.data
   } else {
     return thunkApi.rejectWithValue({
@@ -29,7 +29,7 @@ export const createRoom = createAsyncThunk('room/create', async ({userName}, thu
 
 export const joinRoom = createAsyncThunk('room/join', async ({roomCode, userName}, thunkApi) => {
   const response = await axios.post(`${baseUrl}/rooms/${roomCode}/join`, { userName: userName })
-  if (response.ok) {
+  if (response.status === 200) {
     return response.data
   } else {
     return thunkApi.rejectWithValue({
@@ -40,7 +40,7 @@ export const joinRoom = createAsyncThunk('room/join', async ({roomCode, userName
 
 export const leaveRoom = createAsyncThunk('room/leave', async ({roomCode, userName}, thunkApi) => {
   const response = await axios.post(`${baseUrl}/rooms/${roomCode}/leave`, { userName: userName })
-  if (response.ok) {
+  if (response.status === 200) {
     return response.data
   } else {
     return thunkApi.rejectWithValue({
@@ -51,7 +51,7 @@ export const leaveRoom = createAsyncThunk('room/leave', async ({roomCode, userNa
 
 export const getRoomMessages = createAsyncThunk('room/getMessages', async ({roomId}, thunkApi) => {
   const response = await axios.get(`${baseUrl}/rooms/${roomId}/messages`)
-  if (response.ok) {
+  if (response.status === 200) {
     return response.data
   } else {
     return thunkApi.rejectWithValue({
@@ -62,7 +62,7 @@ export const getRoomMessages = createAsyncThunk('room/getMessages', async ({room
 
 export const sendMessageToRoom = createAsyncThunk('room/sendMessage', async ({roomId, userName, messages}, thunkApi) => {
   const response = await axios.post(`${baseUrl}/rooms/${roomId}/messages`, { userName: userName, messages: messages })
-  if (response.ok) {
+  if (response.status === 200) {
     return response.data
   } else {
     return thunkApi.rejectWithValue({
@@ -73,7 +73,7 @@ export const sendMessageToRoom = createAsyncThunk('room/sendMessage', async ({ro
 
 export const deleteMessageFromRoom = createAsyncThunk('room/deleteMessage', async ({roomId, messageId}, thunkApi) => {
   const response = await axios.post(`${baseUrl}/rooms/${roomId}/messages`, { messageId: messageId })
-  if (response.ok) {
+  if (response.status === 200) {
     return response.data
   } else {
     return thunkApi.rejectWithValue({
@@ -112,13 +112,15 @@ export const roomSlice = createSlice({
   extraReducers: builder => {
     builder
       .addCase(getRoomInfo.fulfilled, (state, action) => {
-        state.roomData = action.payload
+        state.roomData = action.payload.room
       })
       .addCase(createRoom.fulfilled, (state, action) => {
-        state.roomData = action.payload
+        state.roomCode = action.payload.room.entryCode
+        state.roomData = action.payload.room
       })
       .addCase(joinRoom.fulfilled, (state, action) => {
-        state.roomData = action.payload
+        state.roomCode = action.payload.room.entryCode
+        state.roomData = action.payload.room
       })
       .addCase(leaveRoom.fulfilled, (state, action) => {
         state.roomData = {}
