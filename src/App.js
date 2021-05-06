@@ -6,10 +6,17 @@ import { Alert, AlertIcon, AlertDescription, CloseButton } from '@chakra-ui/reac
 import home from './pages/Home'
 import join from './pages/Join'
 import room from './pages/Room'
+import { wakeDb } from './features/rooms/roomSlice'
 import styles from './styles.js';
+import { useEffect } from 'react'
 
 function App() {
   const alerts = useSelector((state) => state.alerts.alerts)
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(wakeDb())
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
   return (
     <div style={styles.app}>
       <header>
