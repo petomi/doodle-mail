@@ -3,9 +3,9 @@ import { Button, FormControl, FormLabel, Input, InputGroup, InputRightElement, S
 import { FaArrowRight } from 'react-icons/fa'
 import { useInput } from '../../hooks/useInput'
 import { useDispatch } from "react-redux"
-import { createRoom, joinRoom } from './roomSlice'
+import { createRoom, joinRoom, setUserName } from './roomSlice'
 import { success, error } from '../alerts/alertSlice'
-import { useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom"
 
 const JoinForm = () => {
   const { value:name, bind:bindName, reset:resetName } = useInput('')
@@ -18,6 +18,7 @@ const JoinForm = () => {
   const handleSubmit = (evt) => {
     evt.preventDefault()
     if (room === '') {
+      dispatch(setUserName({userName: name}))
       dispatch(createRoom({userName: name})).then((data) => {
         if (data.type === 'room/create/fulfilled') {
           const roomData = data.payload.room
@@ -32,6 +33,7 @@ const JoinForm = () => {
         }
       })
     } else {
+      dispatch(setUserName({userName: name}))
       dispatch(joinRoom({ roomCode: room, userName: name })).then((data) => {
         if (data.type === 'room/join/fulfilled') {
           const roomData = data.payload.room
@@ -44,6 +46,7 @@ const JoinForm = () => {
           setFormStage(1)
         }
       })
+
     }
   }
 

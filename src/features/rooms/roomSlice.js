@@ -40,6 +40,7 @@ export const joinRoom = createAsyncThunk('room/join', async ({roomCode, userName
 
 export const leaveRoom = createAsyncThunk('room/leave', async ({roomCode, userName}, thunkApi) => {
   const response = await axios.post(`${baseUrl}/rooms/${roomCode}/leave`, { userName: userName })
+  console.log(response)
   if (response.status === 200) {
     return response.data
   } else {
@@ -122,9 +123,9 @@ export const roomSlice = createSlice({
         state.roomCode = action.payload.room.entryCode
         state.roomData = action.payload.room
       })
-      .addCase(leaveRoom.fulfilled, (state, action) => {
-        state.roomData = {}
+      .addCase(leaveRoom.fulfilled, (state) => {
         state.roomCode = null
+        state.roomData = {}
       })
       .addCase(getRoomMessages.fulfilled, (state, action) => {
         state.roomData.messages = action.payload

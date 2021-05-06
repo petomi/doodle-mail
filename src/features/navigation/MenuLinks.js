@@ -6,6 +6,7 @@ import { success, error } from '../alerts/alertSlice'
 
 export default function MenuLinks({ isOpen }) {
   const roomCode = useSelector((state) => state.room.roomCode)
+  const userName = useSelector((state) => state.room.userName)
   return (
     <Box
       display={{ base: isOpen ? "block" : "none", md: "block" }}
@@ -18,18 +19,17 @@ export default function MenuLinks({ isOpen }) {
         direction={["column", "row", "row", "row"]}
         pt={[4, 4, 0, 0]}
       >
-        <JoinRoomButton isInRoom={(roomCode != null)} />
+        <JoinRoomButton roomCode={roomCode} userName={userName} />
       </Stack>
     </Box>
   )
 }
 
-const JoinRoomButton = ({ isInRoom }) => {
+const JoinRoomButton = ({roomCode, userName}) => {
+  console.log(roomCode)
+  console.log(userName)
   const dispatch = useDispatch()
-  if (isInRoom) {
-    // TODO: pull these in from state
-    const roomCode = ''
-    const userName = ''
+  if (roomCode != null && roomCode !== undefined) {
     return <MenuItem colorScheme="blue" onClick={() => {
       dispatch(leaveRoom({roomCode: roomCode, userName: userName})).then((data) => {
         if (data.type === 'room/leave/fulfilled') {
