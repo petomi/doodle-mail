@@ -79,7 +79,7 @@ const JoinForm = () => {
             />
             <InputRightElement>
               <Button background="transparent" onClick={goToNextStage}>
-                <FaArrowRight color="black"/>
+                <FaArrowRight color={textFieldFocused? 'white' : 'black'}/>
               </Button>
             </InputRightElement>
           </InputGroup>
@@ -110,7 +110,7 @@ const JoinForm = () => {
             />
             <InputRightElement>
               <Button background="transparent" isDisabled={name.length === 0} onClick={handleSubmit}>
-                <FaArrowRight color="white"/>
+                <FaArrowRight color={textFieldFocused ? 'white' : 'black'}/>
               </Button>
             </InputRightElement>
           </InputGroup>
