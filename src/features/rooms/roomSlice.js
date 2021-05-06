@@ -88,8 +88,8 @@ export const roomSlice = createSlice({
   initialState: {
     userName: null,
     lastSyncDate: null,
-    roomCode: null,
-    roomData: {}
+    roomCode: 'cBSL', // null, // TODO: change this to null after dev work is done
+    roomData: { messages: [{title: 'test1', author: 'pleb', imageData: '', date: 'now'}, {title: 'test2', author: 'bob', imageData: '', date: 'feb 2 2021'}] } // {} // TODO: change this to empty object after dev work is done
   },
   reducers: {
     setRoomCode: (state, roomCode) => {
