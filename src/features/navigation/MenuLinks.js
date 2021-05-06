@@ -26,8 +26,6 @@ export default function MenuLinks({ isOpen }) {
 }
 
 const JoinRoomButton = ({roomCode, userName}) => {
-  console.log(roomCode)
-  console.log(userName)
   const dispatch = useDispatch()
   if (roomCode != null && roomCode !== undefined) {
     return <MenuItem colorScheme="blue" onClick={() => {
