@@ -4,6 +4,18 @@ import axios from 'axios'
 // TODO: get base URL from .env file
 const baseUrl = 'https://doodle-mail-server.herokuapp.com'
 
+// eslint-disable-next-line no-empty-pattern
+export const wakeDb = createAsyncThunk('room/wake', async(thunkApi) => {
+  const response = await axios.get(`${baseUrl}/`)
+  if (response.status === 200) {
+    return
+  } else {
+    return thunkApi.rejectWithValue({
+      message: `Could not contact doodle-mail server.`
+    })
+  }
+})
+
 // TODO: may not need this endpoint
 export const getRoomInfo = createAsyncThunk('room/getInfo', async ({roomCode}, thunkApi) => {
   const response = await axios.get(`${baseUrl}/rooms/${roomCode}/info`)
