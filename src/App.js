@@ -6,6 +6,7 @@ import { Alert, AlertIcon, AlertDescription, CloseButton } from '@chakra-ui/reac
 import home from './pages/Home'
 import join from './pages/Join'
 import room from './pages/Room'
+import draw from './pages/Draw'
 import { wakeDb } from './features/rooms/roomSlice'
 import styles from './styles.js';
 import { useEffect } from 'react'
@@ -27,6 +28,7 @@ function App() {
         <Route exact path="/" component={home}/>
         <Route path="/join" component={join}/>
         <Route path="/room" component={room}/>
+        <Route path="/draw" component={draw}/>
       </Switch>
     </div>
   )
