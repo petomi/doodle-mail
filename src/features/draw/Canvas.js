@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import { connect } from 'react-redux'
-import { Button, Text } from '@chakra-ui/react'
+import { Button, Stack, Text } from '@chakra-ui/react'
 import { sendMessageToRoom } from '../rooms/roomSlice'
 import { success, error } from '../alerts/alertSlice'
 import CanvasDraw from "react-canvas-draw";
@@ -10,20 +10,20 @@ import { withRouter } from "react-router-dom";
 class Canvas extends Component {
   constructor(props) {
     super(props)
-    this.setState({
+    this.state ={
       title: 'a',
       imageData: '',
       background: 'a'
-    })
+    }
   }
 
   handleSubmit = (evt) => {
     evt.preventDefault()
     // get image data from canvas
     const canvasData = this.canvas.getSaveData()
-    this.setState(prev => ({
-      ...prev.title,
-      ...prev.background,
+    this.setState(prevState => ({
+      ...prevState.title,
+      ...prevState.background,
       imageData: canvasData,
     }))
     // send message to room
@@ -55,13 +55,14 @@ class Canvas extends Component {
   render() {
     if (this.props.roomCode != null) {
       return (
-        <>
-        {/* // TODO: add title field with state */}
-        {/* // TODO: add background field with state */}
-        <CanvasDraw ref={canvasDraw => (this.canvas = canvasDraw)}/>
-        <Button onClick={(evt) => this.handleSubmit(evt)}>Submit</Button>
-        {/* // TODO: create way to save picture to imageData state. See https://github.com/embiem/react-canvas-draw/blob/master/demo/src/index.js */}
-        </>
+
+        <Stack spacing={16}>
+          {/* // TODO: add title field with state */}
+          {/* // TODO: add background field with state */}
+          <CanvasDraw ref={canvasDraw => (this.canvas = canvasDraw)}/>
+          <Button onClick={(evt) => this.handleSubmit(evt)}>Submit</Button>
+          {/* // TODO: create way to save picture to imageData state. See https://github.com/embiem/react-canvas-draw/blob/master/demo/src/index.js */}
+        </Stack>
       )
     }
     else {
