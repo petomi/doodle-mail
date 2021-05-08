@@ -1,11 +1,14 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Button, Input, Stack, Text } from '@chakra-ui/react'
+import { Button, Center, IconButton, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Spacer, Stack, Text } from '@chakra-ui/react'
 import { sendMessageToRoom } from '../rooms/roomSlice'
 import { success, error } from '../alerts/alertSlice'
 import CanvasDraw from 'react-canvas-draw'
 import { withRouter } from 'react-router-dom'
 import { isMobile } from 'react-device-detect'
+import { FaPlus, FaMinus, FaEyeDropper, FaUndo, FaEraser } from 'react-icons/fa'
+import { ChromePicker } from 'react-color'
+import lz from 'lz-string'
 
 
 class Canvas extends Component {
@@ -14,9 +17,19 @@ class Canvas extends Component {
     this.state ={
       title: 'untitled',
       imageData: '',
-      background: 'white',
-      textFieldFocused: false
+      backgroundColor: 'white',
+      textFieldFocused: false,
+      brushColor: 'black',
+      brushRadius: 12,
+      displayColorPicker: false,
+      colorPickerMode: 'brush'
     }
+  }
+
+  closeColorPicker = () => {
+    this.setState({
+      displayColorPicker: false
+    })
   }
 
   toggleTextFieldFocus = () => {
@@ -28,7 +41,7 @@ class Canvas extends Component {
   handleSubmit = (e) => {
     e.preventDefault()
     // get image data from canvas
-    let canvasData = this.canvas.getSaveData()
+    let canvasData = lz.compress(this.canvas.getSaveData())
     console.log('prev state')
     console.log(this.state)
     this.setState({
@@ -42,7 +55,7 @@ class Canvas extends Component {
         messages: [{
           title: this.state.title,
           imageData: this.state.imageData,
-          background: this.state.background
+          background: this.state.backgroundColor
         }]
       }
       this.props.sendMessageToRoom(sendMessageObject).then((data) => {
@@ -54,7 +67,7 @@ class Canvas extends Component {
           this.setState({
             title: '',
             imageData: '',
-            background: '',
+            backgroundColor: '',
             textFieldFocused: false
           })
         }
@@ -65,7 +78,6 @@ class Canvas extends Component {
   render() {
     if (this.props.roomCode != null) {
       return (
-
         <Stack spacing={8}
           onKeyPress={(e) => { if (e.key === 'Enter') this.handleSubmit(e) }}
         >
@@ -89,11 +101,90 @@ class Canvas extends Component {
             ref={canvasDraw => (this.canvas = canvasDraw)}
             canvasWidth={isMobile ? 1000 : 600}
             canvasHeight={isMobile? 1000 : 600}
+            backgroundColor={this.state.backgroundColor}
+            brushColor={this.state.brushColor}
+            brushRadius={this.state.brushRadius}
           />
-          {/* TODO: add controls for drawing */}
-          {/* // TODO: add background field with state */}
+          <Stack spacing={4} direction="row" align="center">
+            <IconButton
+              variant="outline"
+              colorScheme="black"
+              aria-label="Increase brush size"
+              icon={<FaPlus/>}
+              onClick={() => this.setState({
+                brushRadius: this.state.brushRadius + 4
+              })}
+            />
+            <IconButton
+              variant="outline"
+              colorScheme="black"
+              aria-label="Decrease brush size"
+              icon={<FaMinus/>}
+              onClick={() => this.setState({
+                brushRadius: (this.state.brushRadius === 4) ? 4 : (this.state.brushRadius - 4)
+              })}
+            />
+            <Spacer/>
+            <Text fontSize="lg">Brush:</Text>
+            <IconButton
+              style={{ backgroundColor: this.state.brushColor }}
+              aria-label="Show brush color picker"
+              onClick={() => this.setState({
+                displayColorPicker: true,
+                colorPickerMode: 'brush'
+              })}
+            />
+            <Text fontSize="lg">Background:</Text>
+            <IconButton
+              style={{ backgroundColor: this.state.backgroundColor }}
+              aria-label="Show background color picker"
+              onClick={() => this.setState({
+                displayColorPicker: true,
+                colorPickerMode: 'background'
+              })}
+            />
+            <Modal isOpen={this.state.displayColorPicker} onClose={() => this.setState({ displayColorPicker: false })} isCentered={true} size="xs">
+              <ModalOverlay/>
+              <ModalContent style={{background: 'none', boxShadow: 'none'}}>
+                <ModalCloseButton/>
+                <ModalBody>
+                  <Center>
+                    <ChromePicker
+                      color={ this.state.colorPickerMode === 'background' ? this.state.backgroundColor : this.state.brushColor }
+                      onChangeComplete={ (color) => {
+                        if (this.state.colorPickerMode === 'background') {
+                          this.setState({
+                            backgroundColor: color.hex
+                          })
+                        } else {
+                          this.setState({
+                            brushColor: color.hex
+                          })
+                        }
+                      }}
+                      width="85%"
+                    />
+                  </Center>
+                </ModalBody>
+              </ModalContent>
+            </Modal>
+            <Spacer/>
+            <IconButton
+              variant="outline"
+              colorScheme="black"
+              aria-label="Undo last stroke"
+              icon={<FaUndo/>}
+              onClick={() => this.canvas.undo()}
+            />
+            <IconButton
+              variant="outline"
+              colorScheme="black"
+              aria-label="Erase picture"
+              icon={<FaEraser/>}
+              onClick={() => this.canvas.clear()}
+            />
+          </Stack>
           <Button onClick={(e) => this.handleSubmit(e) } style={{color: 'black', width: '50%', alignSelf: 'center'}}>Submit</Button>
-          {/* // TODO: create way to save picture to imageData state. See https://github.com/embiem/react-canvas-draw/blob/master/demo/src/index.js */}
         </Stack>
       )
     }

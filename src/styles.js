@@ -6,7 +6,7 @@ const app = {
 }
 
 const pageBackground = {
-  height: '100%',
+  minHeight: '100%',
   fontSize: 'calc(10px + 2vmin)',
   color: 'white'
 }

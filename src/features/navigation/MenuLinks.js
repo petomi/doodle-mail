@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { Box, Stack } from '@chakra-ui/react'
-import MenuItem from './MenuItem'
+import NavButton from './NavButton'
 import { leaveRoom } from '../rooms/roomSlice'
 import { success, error } from '../alerts/alertSlice'
 
@@ -28,7 +28,7 @@ export default function MenuLinks({ isOpen }) {
 const JoinRoomButton = ({roomCode, userName}) => {
   const dispatch = useDispatch()
   if (roomCode != null && roomCode !== undefined) {
-    return <MenuItem colorScheme="blue" onClick={() => {
+    return <NavButton colorScheme="blue" onClick={() => {
       dispatch(leaveRoom({roomCode: roomCode, userName: userName})).then((data) => {
         if (data.type === 'room/leave/fulfilled') {
           dispatch(success(`Left room successfully.`))
@@ -38,8 +38,8 @@ const JoinRoomButton = ({roomCode, userName}) => {
         }
       })
 
-    }}>Leave Room</MenuItem>
+    }}>Leave Room</NavButton>
   } else {
-    return <MenuItem to="/join" colorScheme="blue">Join Room</MenuItem>
+    return <NavButton to="/join" colorScheme="blue">Join Room</NavButton>
   }
 }

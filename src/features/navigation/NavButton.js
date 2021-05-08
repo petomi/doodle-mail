@@ -1,7 +1,7 @@
 import { Text, Button } from '@chakra-ui/react'
 import { NavLink, withRouter } from 'react-router-dom'
 
-const MenuItem = ({children, isLast, to = "/", colorScheme, ...rest }) => {
+const NavButton = ({children, isLast, to = "/", colorScheme, ...rest }) => {
   return (
     <NavLink exact to={to}>
       <Button
@@ -16,4 +16,4 @@ const MenuItem = ({children, isLast, to = "/", colorScheme, ...rest }) => {
   )
 }
 
-export default withRouter(MenuItem)
+export default withRouter(NavButton)

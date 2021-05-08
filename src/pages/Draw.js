@@ -5,7 +5,7 @@ import Canvas from '../features/draw/Canvas'
 
 export default function Join (props) {
   return (
-    <Center bg="green.500" style={styles.pageBackground}>
+    <Center bg="gray.600" style={styles.pageBackground}>
       <Canvas />
     </Center>
   )
