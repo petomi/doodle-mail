@@ -1,12 +1,11 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Button, Center, Container, IconButton, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalOverlay, Spacer, Stack, Text } from '@chakra-ui/react'
+import { Box, Button, Center, IconButton, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalOverlay, SimpleGrid, Stack, Text } from '@chakra-ui/react'
 import { sendMessageToRoom } from '../rooms/roomSlice'
 import { success, error } from '../alerts/alertSlice'
 import CanvasDraw from 'react-canvas-draw'
 import { withRouter } from 'react-router-dom'
-import { isMobile } from 'react-device-detect'
-import { FaPlus, FaMinus, FaUndo, FaEraser } from 'react-icons/fa'
+import { FaPlus, FaMinus, FaPaintBrush, FaFillDrip, FaUndo, FaEraser } from 'react-icons/fa'
 import { ChromePicker } from 'react-color'
 import lz from 'lz-string'
 
@@ -22,8 +21,16 @@ class Canvas extends Component {
       brushColor: 'black',
       brushRadius: 12,
       displayColorPicker: false,
-      colorPickerMode: 'brush'
+      colorPickerMode: 'brush',
+      mobileLayout: ((window.innerWidth < 600) ? true : false)
     }
+  }
+
+  componentDidMount() {
+    window.addEventListener("resize",
+      () => {
+        this.setState({ mobileLayout: ((window.innerWidth < 600) ? true : false)})
+   })
   }
 
   closeColorPicker = () => {
@@ -76,38 +83,46 @@ class Canvas extends Component {
   }
 
   render() {
+    console.log(this.state.mobileLayout)
     if (this.props.roomCode != null) {
       // TODO: add mobile styling
       return (
-        <Container>
-          <Stack spacing={8}
-            onKeyPress={(e) => { if (e.key === 'Enter') this.handleSubmit(e) }}
-          >
-            <Input
-              pr="4.5rem"
-              type="text"
-              variant="filled"
-              className="form-field"
-              placeholder="Enter"
-              onFocus={this.toggleTextFieldFocus}
-              onBlur={this.toggleTextFieldFocus}
-              style={{ color: this.state.textFieldFocused ? 'white' : 'black' }}
-              value={this.state.title}
-              onChange={(e) => {
-                this.setState({
-                  title: e.target.value
-                })}
-              }
-            ></Input>
-            <CanvasDraw
-              ref={canvasDraw => (this.canvas = canvasDraw)}
-              canvasWidth={isMobile ? 1000 : 280}
-              canvasHeight={isMobile? 1000 : 280}
-              backgroundColor={this.state.backgroundColor}
-              brushColor={this.state.brushColor}
-              brushRadius={this.state.brushRadius}
-            />
-            <Stack spacing={4} direction="row" align="center">
+        <Stack
+          spacing={[4, 4]}
+          p={[2, 8]}
+          m={[2, 4]}
+          w="100%"
+          alignItems="center"
+          justifyContent="flex-start"
+          onKeyPress={(e) => { if (e.key === 'Enter') this.handleSubmit(e) }}
+        >
+          <Input
+            maxWidth={600}
+            type="text"
+            variant="filled"
+            className="form-field"
+            placeholder="Enter"
+            onFocus={this.toggleTextFieldFocus}
+            onBlur={this.toggleTextFieldFocus}
+            style={{ color: this.state.textFieldFocused ? 'white' : 'black' }}
+            value={this.state.title}
+            onChange={(e) => {
+              this.setState({
+                title: e.target.value
+              })}
+            }
+          ></Input>
+          <CanvasDraw
+            ref={canvasDraw => (this.canvas = canvasDraw)}
+            canvasWidth={this.state.mobileLayout ? 300 : 600}
+            canvasHeight={this.state.mobileLayout ? 300 : 600}
+            backgroundColor={this.state.backgroundColor}
+            brushColor={this.state.brushColor}
+            brushRadius={this.state.brushRadius}
+            alignSelf="center"
+          />
+          <SimpleGrid width={300} columns={3} spacingY="10px">
+            <Box>
               <IconButton
                 variant="outline"
                 colorScheme="black"
@@ -126,51 +141,54 @@ class Canvas extends Component {
                   brushRadius: (this.state.brushRadius === 4) ? 4 : (this.state.brushRadius - 4)
                 })}
               />
-              <Spacer/>
-              <Text fontSize="lg">Brush:</Text>
+            </Box>
+            <Box>
               <IconButton
                 style={{ backgroundColor: this.state.brushColor }}
                 aria-label="Show brush color picker"
+                icon={<FaPaintBrush/>}
+                color="white"
                 onClick={() => this.setState({
                   displayColorPicker: true,
                   colorPickerMode: 'brush'
                 })}
               />
-              <Text fontSize="lg">Background:</Text>
               <IconButton
                 style={{ backgroundColor: this.state.backgroundColor }}
                 aria-label="Show background color picker"
+                icon={<FaFillDrip/>}
                 onClick={() => this.setState({
                   displayColorPicker: true,
                   colorPickerMode: 'background'
                 })}
               />
-              <Modal isOpen={this.state.displayColorPicker} onClose={() => this.setState({ displayColorPicker: false })} isCentered={true} size="xs">
-                <ModalOverlay/>
-                <ModalContent style={{background: 'none', boxShadow: 'none'}}>
-                  <ModalCloseButton/>
-                  <ModalBody>
-                    <Center>
-                      <ChromePicker
-                        color={ this.state.colorPickerMode === 'background' ? this.state.backgroundColor : this.state.brushColor }
-                        onChangeComplete={ (color) => {
-                          if (this.state.colorPickerMode === 'background') {
-                            this.setState({
-                              backgroundColor: color.hex
-                            })
-                          } else {
-                            this.setState({
-                              brushColor: color.hex
-                            })
-                          }
-                        }}
-                        width="85%"
-                      />
-                    </Center>
-                  </ModalBody>
-                </ModalContent>
-              </Modal>
-              <Spacer/>
+            </Box>
+            <Modal isOpen={this.state.displayColorPicker} onClose={() => this.setState({ displayColorPicker: false })} isCentered={true} size="xs">
+              <ModalOverlay/>
+              <ModalContent style={{background: 'none', boxShadow: 'none'}}>
+                <ModalCloseButton bg="white"/>
+                <ModalBody>
+                  <Center>
+                    <ChromePicker
+                      color={ this.state.colorPickerMode === 'background' ? this.state.backgroundColor : this.state.brushColor }
+                      onChangeComplete={ (color) => {
+                        if (this.state.colorPickerMode === 'background') {
+                          this.setState({
+                            backgroundColor: color.hex
+                          })
+                        } else {
+                          this.setState({
+                            brushColor: color.hex
+                          })
+                        }
+                      }}
+                      width="85%"
+                    />
+                  </Center>
+                </ModalBody>
+              </ModalContent>
+            </Modal>
+            <Box>
               <IconButton
                 variant="outline"
                 colorScheme="black"
@@ -185,10 +203,10 @@ class Canvas extends Component {
                 icon={<FaEraser/>}
                 onClick={() => this.canvas.clear()}
               />
-            </Stack>
-            <Button onClick={(e) => this.handleSubmit(e) } style={{color: 'black', width: '50%', alignSelf: 'center'}}>Submit</Button>
-          </Stack>
-        </Container>
+            </Box>
+          </SimpleGrid>
+          <Button onClick={(e) => this.handleSubmit(e) } color="black" alignSelf="center">Submit</Button>
+        </Stack>
       )
     }
     else {

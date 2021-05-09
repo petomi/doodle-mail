@@ -16,6 +16,7 @@ const JoinForm = () => {
   const history = useHistory()
 
   const handleSubmit = (evt) => {
+    // TODO: save room name in local storage and retrieve it from there on app load (if present)
     evt.preventDefault()
     if (room === '') {
       dispatch(setUserName({userName: name}))
@@ -61,16 +62,15 @@ const JoinForm = () => {
 
   if (formStage === 1) {
     return (
-      <Stack w='400px' spacing={16}>
+      <Stack w='400px' spacing={16} padding={[3, 0]}>
         <FormControl id="room-code">
           <FormLabel textAlign="center" fontSize="4xl">Have a room code?</FormLabel>
           <InputGroup size="lg">
             <Input
-              pr="4.5rem"
               type="text"
               variant="filled"
               className="form-field"
-              placeholder="Type room code, then press enter."
+              placeholder="room code"
               onFocus={() => setTextFieldFocused(!textFieldFocused)}
               onBlur={() => setTextFieldFocused(!textFieldFocused)}
               style={{ color: textFieldFocused ? 'white' : 'black' }}
@@ -84,20 +84,19 @@ const JoinForm = () => {
             </InputRightElement>
           </InputGroup>
         </FormControl>
-        <Button color="black" alignSelf="center" width="50%" onClick={goToNextStage}>
-          Make a new room
+        <Button color="black" alignSelf="center" width="60%" onClick={goToNextStage}>
+          Create New Room
         </Button>
       </Stack>
     )
   }
   if (formStage === 2) {
     return (
-      <Stack w='400px' spacing={16}>
+      <Stack w='400px' spacing={16} padding={[3, 0]}>
         <FormControl id="name">
           <FormLabel textAlign="center" fontSize="4xl">What is your name?</FormLabel>
           <InputGroup size="lg">
             <Input
-              pr="4.5rem"
               type="text"
               variant="filled"
               className="form-field"

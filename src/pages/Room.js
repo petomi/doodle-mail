@@ -7,10 +7,9 @@ import { useSelector } from 'react-redux'
 export default function Room (props) {
   const roomCode = useSelector((state) => state.room.roomCode)
   const roomData = useSelector((state) => state.room.roomData)
-  // const room = useSelector((state) => state.room.roomData)
   return (
     <Center bg="orange.500" style={styles.pageBackground}>
-      <Stack spacing={8}>
+      <Stack spacing={8} padding={[3, 0]}>
       <NavButton to="/draw" colorScheme="blue">New Message</NavButton>
         <Heading>Room Code: {roomCode}</Heading>
         {/* TODO: add scroll bar */}

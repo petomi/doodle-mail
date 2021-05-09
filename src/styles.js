@@ -1,10 +1,3 @@
-const app = {
-  textAlign: 'center',
-  height: '100vh',
-  display: 'flex',
-  flexDirection: 'column'
-}
-
 const pageBackground = {
   minHeight: '100%',
   fontSize: 'calc(10px + 2vmin)',
@@ -16,7 +9,6 @@ const appLink = {
 }
 
 const styles = {
-  app,
   pageBackground,
   appLink
 }

@@ -19,7 +19,7 @@ function App() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   return (
-    <div style={styles.app}>
+    <div style={{ textAlign: 'center', minHeight: '100vh', display: 'flex', flexDirection: 'column'}}>
       <header>
         <NavBar />
         <AlertsBar alerts={alerts} />
