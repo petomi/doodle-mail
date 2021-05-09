@@ -90,7 +90,7 @@ class Canvas extends Component {
         <Stack
           spacing={[4, 4]}
           p={[2, 8]}
-          m={[2, 4]}
+          m={2}
           w="100%"
           alignItems="center"
           justifyContent="flex-start"
