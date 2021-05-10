@@ -64,7 +64,7 @@ const JoinForm = () => {
     return (
       <Stack w='400px' spacing={16} padding={[3, 0]}>
         <FormControl id="room-code">
-          <FormLabel textAlign="center" fontSize="4xl">Have a room code?</FormLabel>
+          <FormLabel textAlign="center" fontSize="4xl" color="white">Have a room code?</FormLabel>
           <InputGroup size="lg">
             <Input
               type="text"
@@ -94,7 +94,7 @@ const JoinForm = () => {
     return (
       <Stack w='400px' spacing={16} padding={[3, 0]}>
         <FormControl id="name">
-          <FormLabel textAlign="center" fontSize="4xl">What is your name?</FormLabel>
+          <FormLabel textAlign="center" fontSize="4xl" color="white">What is your name?</FormLabel>
           <InputGroup size="lg">
             <Input
               type="text"
@@ -114,7 +114,7 @@ const JoinForm = () => {
             </InputRightElement>
           </InputGroup>
           <br/>
-          <Link fontSize={["sm", "m"]} onClick={goToPrevStage}>Take me back!</Link>
+          <Link fontSize={["sm", "m"]} color="white" onClick={goToPrevStage}>Take me back!</Link>
         </FormControl>
       </Stack>
     )

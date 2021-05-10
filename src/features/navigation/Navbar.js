@@ -9,7 +9,7 @@ const NavBar = (props) => {
   const toggle = () => setIsOpen(!isOpen)
 
   return (
-    <NavBarContainer {...props}>
+    <NavBarContainer style={{ backgroundColor: 'white' }} {...props}>
       <Logo
         w={["180px", "400px"]}
       />

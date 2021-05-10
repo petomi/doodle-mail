@@ -1,5 +1,4 @@
 import React from 'react'
-import styles from '../styles.js'
 import NavButton from '../features/navigation/NavButton'
 import { Box, Center, Heading, Stack, Text } from '@chakra-ui/react'
 import { useSelector } from 'react-redux'
@@ -8,7 +7,7 @@ export default function Room (props) {
   const roomCode = useSelector((state) => state.room.roomCode)
   const roomData = useSelector((state) => state.room.roomData)
   return (
-    <Center bg="orange.500" style={styles.pageBackground}>
+    <Center minHeight={['400px', '800px']}>
       <Stack spacing={8} padding={[3, 0]}>
       <NavButton to="/draw" colorScheme="blue">New Message</NavButton>
         <Heading>Room Code: {roomCode}</Heading>

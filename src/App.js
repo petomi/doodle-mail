@@ -1,25 +1,32 @@
+import { useEffect, useState } from 'react'
 import NavBar from './features/navigation/Navbar'
 import { useSelector, useDispatch } from 'react-redux'
 import { hideAlert } from './features/alerts/alertSlice'
-import { Switch, Route } from 'react-router-dom'
+import { Switch, Route, useLocation } from 'react-router-dom'
 import { Alert, AlertIcon, AlertDescription, CloseButton } from '@chakra-ui/react'
 import home from './pages/Home'
 import join from './pages/Join'
 import room from './pages/Room'
 import draw from './pages/Draw'
 import { wakeDb } from './features/rooms/roomSlice'
-import styles from './styles.js';
-import { useEffect } from 'react'
 
 function App() {
+  const [backgroundColor, setBackgroundColor] = useState('#1565C0')
   const alerts = useSelector((state) => state.alerts.alerts)
   const dispatch = useDispatch()
+  let location = useLocation()
+  // on app first load, call wakeDb to wake heroku backend
   useEffect(() => {
     dispatch(wakeDb())
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+  // every time route updates, update background color to fit route
+  useEffect(() => {
+    console.log(location)
+    setBackgroundColor(getRouteBackgroundColor(location.pathname))
+  }, [location])
   return (
-    <div style={{ textAlign: 'center', minHeight: '100vh', display: 'flex', flexDirection: 'column'}}>
+    <div style={{ textAlign: 'center', minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: backgroundColor }}>
       <header>
         <NavBar />
         <AlertsBar alerts={alerts} />
@@ -51,4 +58,19 @@ const AlertsBar = ({ alerts }) => {
   return bar
 }
 
-export default App;
+// return a different background color for each route
+const getRouteBackgroundColor = (route) => {
+  switch(route) {
+    case '/join':
+      return '#6200EE'
+    case '/room':
+      return '#DD6B20'
+    case '/draw':
+      return '#4A5568'
+    case '/':
+    default:
+      return '#1565C0'
+  }
+}
+
+export default App

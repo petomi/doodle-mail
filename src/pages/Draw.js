@@ -4,7 +4,7 @@ import Canvas from '../features/draw/Canvas'
 
 export default function Join (props) {
   return (
-      <Center bg="gray.600" w="100%" minHeight={["100%"]} alignItems="center">
+      <Center w="100%" minHeight={['600px', '800px']} alignItems="center">
         <Canvas />
       </Center>
   )

@@ -85,7 +85,6 @@ class Canvas extends Component {
   render() {
     console.log(this.state.mobileLayout)
     if (this.props.roomCode != null) {
-      // TODO: add mobile styling
       return (
         <Stack
           spacing={[4, 4]}
@@ -97,7 +96,7 @@ class Canvas extends Component {
           onKeyPress={(e) => { if (e.key === 'Enter') this.handleSubmit(e) }}
         >
           <Input
-            maxWidth={600}
+            width={[300, 600]}
             type="text"
             variant="filled"
             className="form-field"
