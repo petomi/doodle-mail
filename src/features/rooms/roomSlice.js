@@ -98,10 +98,10 @@ export const deleteMessageFromRoom = createAsyncThunk('room/deleteMessage', asyn
 export const roomSlice = createSlice({
   name: 'room',
   initialState: {
-    userName: 'test', // null, // TODO: set this to null after debugging
+    userName: null,
     lastSyncDate: null,
-    roomCode: 'cBSL', // null, // TODO: change this to null after dev work is done
-    roomData: { _id: '6083307c10cd25158809b90b', messages: [{title: 'test1', author: 'pleb', imageData: '', date: 'now'}, {title: 'test2', author: 'bob', imageData: '', date: 'feb 2 2021'}] } // {} // TODO: change this to empty object after dev work is done
+    roomCode: null,
+    roomData: {}
   },
   reducers: {
     setRoomCode: (state, roomCode) => {
