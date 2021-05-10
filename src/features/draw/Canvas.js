@@ -7,7 +7,7 @@ import CanvasDraw from 'react-canvas-draw'
 import { withRouter } from 'react-router-dom'
 import { FaPlus, FaMinus, FaPaintBrush, FaFillDrip, FaUndo, FaEraser } from 'react-icons/fa'
 import { ChromePicker } from 'react-color'
-import lz from 'lz-string'
+import LZString from 'lz-string'
 
 
 class Canvas extends Component {
@@ -48,17 +48,13 @@ class Canvas extends Component {
   handleSubmit = (e) => {
     e.preventDefault()
     // get image data from canvas
-    let canvasData = lz.compress(this.canvas.getSaveData())
-    console.log('prev state')
-    console.log(this.state)
+    let canvasData = LZString.compressToUTF16(this.canvas.getSaveData())
     this.setState({
       imageData: canvasData,
     }, () => {
-      console.log('after state')
-      console.log(this.state)
       let sendMessageObject = {
         roomId: this.props.roomData._id,
-        userName: this.props.userName,
+        userName: this.props.userName.userName,
         messages: [{
           title: this.state.title,
           imageData: this.state.imageData,
@@ -83,7 +79,6 @@ class Canvas extends Component {
   }
 
   render() {
-    console.log(this.state.mobileLayout)
     if (this.props.roomCode != null) {
       return (
         <Stack

@@ -39,6 +39,7 @@ export const createRoom = createAsyncThunk('room/create', async ({userName}, thu
   }
 })
 
+// TODO: - write room and user data to localStorage, remove user from room when they close the app
 export const joinRoom = createAsyncThunk('room/join', async ({roomCode, userName}, thunkApi) => {
   const response = await axios.post(`${baseUrl}/rooms/${roomCode}/join`, { userName: userName })
   if (response.status === 200) {

@@ -22,7 +22,6 @@ function App() {
   }, [])
   // every time route updates, update background color to fit route
   useEffect(() => {
-    console.log(location)
     setBackgroundColor(getRouteBackgroundColor(location.pathname))
   }, [location])
   return (
