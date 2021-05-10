@@ -1,9 +1,11 @@
 import React from 'react'
 import NavButton from '../features/navigation/NavButton'
-import { Box, Center, Heading, Stack, Text } from '@chakra-ui/react'
+import DoodleCard from '../features/rooms/DoodleCard'
+import { Center, Heading, Stack } from '@chakra-ui/react'
 import { useSelector } from 'react-redux'
 
-export default function Room (props) {
+
+export default function Room () {
   const roomCode = useSelector((state) => state.room.roomCode)
   const roomData = useSelector((state) => state.room.roomData)
   return (
@@ -11,7 +13,6 @@ export default function Room (props) {
       <Stack spacing={8} padding={[3, 0]}>
       <NavButton to="/draw" colorScheme="blue">New Message</NavButton>
         <Heading>Room Code: {roomCode}</Heading>
-        {/* TODO: add scroll bar */}
         <MessageRepeater messages={roomData.messages} />
       </Stack>
     </Center>
@@ -19,14 +20,10 @@ export default function Room (props) {
 }
 
 const MessageRepeater = ({ messages }) => {
+  /* TODO: add pagination */
   return messages.map((message, index) => {
-    return(
-    <Box key={index} p={5} shadow="md" borderWidth="1px">
-      {/* TODO: add viewing drawing and decompression using lzstring, see: https://pieroxy.net/blog/pages/lz-string/guide.html */}
-      <Text>{message.author} - {message.date}</Text>
-      <hr/>
-      <Text>title: {message.title}</Text>
-    </Box>
+    return (
+      <DoodleCard message={message} key={index} />
     )
   })
 }
