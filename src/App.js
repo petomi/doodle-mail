@@ -63,7 +63,7 @@ const getRouteBackgroundColor = (route) => {
     case '/join':
       return '#6200EE'
     case '/room':
-      return '#DD6B20'
+      return '#E2E8F0'
     case '/draw':
       return '#4A5568'
     case '/':
