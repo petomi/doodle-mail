@@ -3,23 +3,21 @@ import NavBar from './features/navigation/Navbar'
 import { useSelector, useDispatch } from 'react-redux'
 import { hideAlert } from './features/alerts/alertSlice'
 import { Switch, Route, useLocation } from 'react-router-dom'
-import socketIOClient from 'socket.io-client'
 import { Alert, AlertIcon, AlertDescription, CloseButton } from '@chakra-ui/react'
 import home from './pages/Home'
 import join from './pages/Join'
 import room from './pages/Room'
 import draw from './pages/Draw'
-import { wakeDb } from './features/rooms/roomSlice'
 
 function App() {
   const [backgroundColor, setBackgroundColor] = useState('#1565C0')
   const alerts = useSelector((state) => state.alerts.alerts)
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
   let location = useLocation()
   // on app first load, call wakeDb to wake heroku backend
   useEffect(() => {
-    dispatch(wakeDb())
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // dispatch(wakeDb())
+    // TODO: hook into room here? or in redux?
   }, [])
   // every time route updates, update background color to fit route
   useEffect(() => {
