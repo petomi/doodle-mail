@@ -28,7 +28,7 @@ class Canvas extends Component {
   }
 
   componentDidMount() {
-    window.addEventListener("resize",
+    window.addEventListener('resize',
       () => {
         this.setState({ mobileLayout: ((window.innerWidth < 600) ? true : false)})
     })

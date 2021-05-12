@@ -12,4 +12,7 @@ socket.on('error', (err) => {
   console.log(err)
 })
 
+// TODO: have one notification handler than just creates alerts
+// based on the message passed through?
+
 export default socket
