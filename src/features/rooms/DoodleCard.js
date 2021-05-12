@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Box, Flex, Spacer, Text } from '@chakra-ui/react'
 import CanvasDraw from 'react-canvas-draw'
-import LZString from 'lz-string'
 
 const DoodleCard = (props) => {
   const [mobileLayout, setMobileLayout] = useState((window.innerWidth < 600) ? true : false)
-  const decompressedImageData = LZString.decompressFromUTF16(props.message.imageData)
+  const decompressedImageData = props.message.imageData
 
   useEffect(() => {
     window.addEventListener('resize',

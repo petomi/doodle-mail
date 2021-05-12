@@ -7,7 +7,6 @@ import CanvasDraw from 'react-canvas-draw'
 import { withRouter } from 'react-router-dom'
 import { FaPlus, FaMinus, FaPaintBrush, FaFillDrip, FaUndo, FaEraser } from 'react-icons/fa'
 import { ChromePicker } from 'react-color'
-import LZString from 'lz-string'
 import socket from '../websocket/socket'
 
 
@@ -60,7 +59,7 @@ class Canvas extends Component {
   handleSubmit = (e) => {
     e.preventDefault()
     // get image data from canvas
-    let canvasData = LZString.compressToUTF16(this.canvas.getSaveData())
+    let canvasData = this.canvas.getSaveData()
     this.setState({
       imageData: canvasData,
     }, () => {
