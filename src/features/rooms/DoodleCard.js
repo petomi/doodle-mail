@@ -22,7 +22,7 @@ const DoodleCard = (props) => {
   return(
     <Box p={5} shadow="base" borderWidth="1px" alignItems="center" background="white" rounded={{ md: 'lg' }} overflow="hidden">
       <Flex>
-        <Box>{props.message.author}</Box>
+        <Box>{props.message.author.userName}</Box>
         <Spacer/>
         <Box>{new Date(props.message.date).toDateString()}</Box>
       </Flex>

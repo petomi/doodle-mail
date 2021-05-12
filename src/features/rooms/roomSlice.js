@@ -2,10 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import socket from '../websocket/socket'
 
 // set up calls out to server
-export const getRoomInfo = createAsyncThunk('room/getInfo', async ({roomCode, userName}) => {
-  socket.auth = { userName }
-  socket.connect() // TODO: only connect and set auth once for entire app
-
+export const getRoomInfo = createAsyncThunk('room/getInfo', async ({roomCode}) => {
   socket.emit('rooms:info', roomCode)
   return
 })
@@ -13,8 +10,7 @@ export const getRoomInfo = createAsyncThunk('room/getInfo', async ({roomCode, us
 export const createRoom = createAsyncThunk('room/create', async ({userName}) => {
   socket.auth = { userName }
   socket.connect() // TODO: only connect and set auth once for entire app
-  // TODO: pass userName through auth only once server supports it.
-  socket.emit('rooms:create', userName)
+  socket.emit('rooms:create')
   return
 })
 
@@ -22,40 +18,27 @@ export const createRoom = createAsyncThunk('room/create', async ({userName}) => 
 export const joinRoom = createAsyncThunk('room/join', async ({roomCode, userName}) => {
   socket.auth = { userName }
   socket.connect() // TODO: only connect and set auth once for entire app
-  // TODO: disconnect on leave room
-
-  socket.emit('rooms:join', roomCode, userName)
+  socket.emit('rooms:join', roomCode)
   return
 })
 
-export const leaveRoom = createAsyncThunk('room/leave', async ({roomCode, userName}) => {
-  socket.auth = { userName }
-  socket.connect() // TODO: only connect and set auth once for entire app
-
-  socket.emit('rooms:leave', roomCode, userName)
+export const leaveRoom = createAsyncThunk('room/leave', async ({roomCode}) => {
+  socket.emit('rooms:leave', roomCode)
   return
 })
 
 export const getRoomMessages = createAsyncThunk('room/getMessages', async ({roomId}) => {
-  socket.connect() // TODO: only connect and set auth once for entire app
-
   socket.emit('rooms:messages', roomId)
   return
 })
 
-export const sendMessageToRoom = createAsyncThunk('room/sendMessage', async ({roomId, userName, messages}) => {
-  socket.auth = { userName }
-  socket.connect() // TODO: only connect and set auth once for entire app
-
-  socket.emit('rooms:messages:send', roomId, userName, messages)
+export const sendMessageToRoom = createAsyncThunk('room/sendMessage', async ({roomId, messages}) => {
+  socket.emit('rooms:messages:send', roomId, messages)
   return
 })
 
-export const deleteMessageFromRoom = createAsyncThunk('room/deleteMessage', async ({roomId, messageId, userName}) => {
-  socket.auth = {userName}
-  socket.connect()
-
-  socket.emit('rooms:messages:delete', (messageId, roomId, userName))
+export const deleteMessageFromRoom = createAsyncThunk('room/deleteMessage', async ({roomId, messageId}) => {
+  socket.emit('rooms:messages:delete', (messageId, roomId))
   return
 })
 

@@ -8,7 +8,6 @@ import socket from '../websocket/socket'
 
 export default function MenuLinks({ isOpen }) {
   const roomCode = useSelector((state) => state.room.roomCode)
-  const userName = useSelector((state) => state.room.userName)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -34,17 +33,17 @@ export default function MenuLinks({ isOpen }) {
         direction={["column", "row", "row", "row"]}
         pt={[4, 4, 0, 0]}
       >
-        <JoinRoomButton roomCode={roomCode} userName={userName} />
+        <JoinRoomButton roomCode={roomCode} />
       </Stack>
     </Box>
   )
 }
 
-const JoinRoomButton = ({roomCode, userName}) => {
+const JoinRoomButton = ({roomCode}) => {
   const dispatch = useDispatch()
   if (roomCode != null && roomCode !== undefined) {
     return <NavButton colorScheme="blue" onClick={() => {
-      dispatch(leaveRoom({roomCode: roomCode, userName: userName})).then((data) => {
+      dispatch(leaveRoom({roomCode: roomCode})).then((data) => {
         if (data.type === 'room/leave/fulfilled') {
           dispatch(success(`Left room successfully.`))
         }

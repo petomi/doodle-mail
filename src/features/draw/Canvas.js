@@ -65,7 +65,6 @@ class Canvas extends Component {
     }, () => {
       let sendMessageObject = {
         roomId: this.props.roomData._id,
-        userName: this.props.userName.userName,
         messages: [{
           title: this.state.title,
           imageData: this.state.imageData,
@@ -225,8 +224,7 @@ class Canvas extends Component {
 const mapStateToProps = (state) => {
   return {
     roomCode: state.room.roomCode,
-    roomData: state.room.roomData,
-    userName: state.room.userName
+    roomData: state.room.roomData
   }
 }
 
