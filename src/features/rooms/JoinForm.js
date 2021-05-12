@@ -57,7 +57,7 @@ const JoinForm = () => {
 
   // handle submitting form
   const handleSubmit = (evt) => {
-    // TODO: save room name in local storage and retrieve it from there on app load (if present)
+    // TODO: save room name + userName in local storage and retrieve it from there on app load (if present)
     evt.preventDefault()
     dispatch(setUserName({userName: name}))
     // if room is blank,  create one
@@ -73,7 +73,6 @@ const JoinForm = () => {
   }
 
   const goToNextStage = () => {
-    // TODO: check if requested room exists? if not show error message?
     setFormStage(2)
   }
 

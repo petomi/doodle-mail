@@ -7,7 +7,7 @@ import { Center, Flex, Heading, Spacer, Stack } from '@chakra-ui/react'
 import { useSelector } from 'react-redux'
 import socket from '../features/websocket/socket'
 
-
+// TODO: add notification when another user joins the room
 export default function Room () {
   const roomCode = useSelector((state) => state.room.roomCode)
   const roomData = useSelector((state) => state.room.roomData)
@@ -39,7 +39,6 @@ export default function Room () {
     return (
       <Center minHeight={['400px', '800px']}>
         <Stack spacing={8} padding={[3, 0]} w={['100%', '800px']}>
-          {/* TODO: use a websocket connection to join, leave, and send data to/from the room */}
         <Flex>
           <Heading fontSize={['lg', 'xl']} margin="auto">Room Code: {roomCode}</Heading>
           <Spacer/>
@@ -60,7 +59,7 @@ export default function Room () {
 }
 
 const MessageRepeater = ({ messages }) => {
-  /* TODO: add pagination */
+  /* TODO add pagination */
   return messages.map((message, index) => {
     return (
       <DoodleCard message={message} key={index} />

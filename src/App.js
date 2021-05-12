@@ -14,11 +14,6 @@ function App() {
   const alerts = useSelector((state) => state.alerts.alerts)
   // const dispatch = useDispatch()
   let location = useLocation()
-  // on app first load, call wakeDb to wake heroku backend
-  useEffect(() => {
-    // dispatch(wakeDb())
-    // TODO: hook into room here? or in redux?
-  }, [])
   // every time route updates, update background color to fit route
   useEffect(() => {
     setBackgroundColor(getRouteBackgroundColor(location.pathname))
