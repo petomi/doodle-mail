@@ -36,6 +36,16 @@ const JoinForm = () => {
       history.push('/room')
     })
 
+    socket.on('connect_error', (err) => {
+      if (err.message === 'invalid username') {
+        console.log('Invalid username selected. User already exists in room.')
+        dispatch(error(`Invalid username selected. User may already exist in room.`))
+      }
+      resetName()
+      resetRoom()
+      setFormStage(1)
+    });
+
     socket.on('error', (err) => {
       if (requestedRoom === '') {
         dispatch(error(`Failed to create room!`))
@@ -49,6 +59,7 @@ const JoinForm = () => {
 
     return function cleanupListeners () {
       socket.off('room:create')
+      socket.off('connect_error')
       socket.off('room:join')
       socket.off('error')
     }
