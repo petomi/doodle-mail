@@ -16,7 +16,7 @@ export default function Room () {
   useEffect(() => {
     // web socket event handlers
     socket.on('room', (room) => {
-      console.log('room data updated')
+      ('room data updated')
       const roomData = room.room
       const roomCode = roomData.entryCode
       dispatch(setRoomCode(roomCode))
@@ -24,7 +24,6 @@ export default function Room () {
     })
 
     socket.on('messages', (messages) => {
-      console.log('room messages updated')
       dispatch(updateRoomMessages(messages.messages))
     })
 

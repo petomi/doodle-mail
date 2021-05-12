@@ -14,7 +14,6 @@ export default function MenuLinks({ isOpen }) {
   useEffect(() => {
     // web socket event handlers
     socket.on('room:leave', () => {
-      console.log('leaving room and clearing data')
       dispatch(clearRoomData())
     })
 

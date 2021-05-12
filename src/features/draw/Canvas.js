@@ -33,7 +33,6 @@ class Canvas extends Component {
         this.setState({ mobileLayout: ((window.innerWidth < 600) ? true : false)})
     })
     socket.on('messages', (messages) => {
-      console.log('room messages updated')
       this.props.updateRoomMessages(messages.messages)
     })
     socket.on('error', (err) => {

@@ -21,7 +21,6 @@ const JoinForm = () => {
     socket.on('room:create', (room) => {
       const roomData = room.room
       const roomCode = roomData.entryCode
-      console.log(`room: ${roomCode} created`)
       dispatch(setRoomCode(roomCode))
       dispatch(setRoomData(roomData))
       dispatch(success(`Created room! Join with code: ${roomData.entryCode}`))
@@ -31,7 +30,6 @@ const JoinForm = () => {
     socket.on('room:join', (room) => {
       const roomData = room.room
       const roomCode = roomData.entryCode
-      console.log(`room: ${roomCode} created`)
       dispatch(setRoomCode(roomCode))
       dispatch(setRoomData(roomData))
       dispatch(success(`Joined room with room code ${roomData.entryCode}`))
