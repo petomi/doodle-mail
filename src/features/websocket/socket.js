@@ -8,4 +8,8 @@ socket.onAny((event, ...args) => {
   console.log(event, args)
 })
 
+socket.on('error', (err) => {
+  console.log(err)
+})
+
 export default socket

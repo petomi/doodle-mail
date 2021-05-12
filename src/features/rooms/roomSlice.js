@@ -1,19 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import socket from '../websocket/socket'
 
-// set up socket listeners
-socket.on('error', (err) => {
-  console.log(err)
-})
-
-socket.on('room', (room) => {
-  const roomData = room.room
-  const roomCode = roomData.entryCode
-  console.log(`room: ${roomCode} created`)
-  setRoomCode(roomCode)
-  setRoomData(roomData)
-})
-
 // set up calls out to server
 export const getRoomInfo = createAsyncThunk('room/getInfo', async ({roomCode, userName}) => {
   socket.auth = { userName }
@@ -81,6 +68,10 @@ export const roomSlice = createSlice({
     roomData: {}
   },
   reducers: {
+    clearRoomData: (state) => {
+      state.roomCode = null
+      state.RoomData = {}
+    },
     setRoomCode: (state, roomCode) => {
       if (roomCode == null) {
         state.roomCode = null
@@ -102,32 +93,17 @@ export const roomSlice = createSlice({
         state.userName = name.payload
       }
     },
+    updateRoomMessages: (state, messages) => {
+      if (messages.payload.length > 0) {
+        state.roomData.messages = messages.payload
+      }
+    },
     updateLastSyncDate: (state) => {
       state.lastSyncDate = new Date()
     }
-  },
-  extraReducers: builder => {
-    // TODO: migrate these to event listeners (see top)
-    builder
-      .addCase(getRoomInfo.fulfilled, (state, action) => {
-        state.roomData = action.payload.room
-      })
-      .addCase(leaveRoom.fulfilled, (state) => {
-        state.roomCode = null
-        state.roomData = {}
-      })
-      .addCase(getRoomMessages.fulfilled, (state, action) => {
-        state.roomData.messages = action.payload
-      })
-      .addCase(sendMessageToRoom.fulfilled, (state, action) => {
-        state.roomData.messages = action.payload
-      })
-      .addCase(deleteMessageFromRoom.fulfilled, (state, action) => {
-        state.roomData.messages = action.payload
-      })
   }
 })
 
-export const { setRoomCode, setRoomData, setUserName, updateLastSyncDate } = roomSlice.actions
+export const { clearRoomData, setRoomCode, setRoomData, setUserName, updateRoomMessages } = roomSlice.actions
 
 export default roomSlice.reducer

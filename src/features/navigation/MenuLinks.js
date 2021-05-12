@@ -1,12 +1,28 @@
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Box, Stack } from '@chakra-ui/react'
 import NavButton from './NavButton'
-import { leaveRoom } from '../rooms/roomSlice'
+import { clearRoomData, leaveRoom } from '../rooms/roomSlice'
 import { success, error } from '../alerts/alertSlice'
+import socket from '../websocket/socket'
 
 export default function MenuLinks({ isOpen }) {
   const roomCode = useSelector((state) => state.room.roomCode)
   const userName = useSelector((state) => state.room.userName)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    // web socket event handlers
+    socket.on('room:leave', () => {
+      console.log('leaving room and clearing data')
+      dispatch(clearRoomData())
+    })
+
+    return function cleanupListeners () {
+      socket.off('room:leave')
+    }
+  })
+
   return (
     <Box
       display={{ base: isOpen ? "block" : "none", md: "block" }}

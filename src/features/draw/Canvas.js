@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Box, Button, Center, IconButton, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalOverlay, SimpleGrid, Stack, Text } from '@chakra-ui/react'
-import { sendMessageToRoom } from '../rooms/roomSlice'
+import { sendMessageToRoom, updateRoomMessages } from '../rooms/roomSlice'
 import { success, error } from '../alerts/alertSlice'
 import CanvasDraw from 'react-canvas-draw'
 import { withRouter } from 'react-router-dom'
 import { FaPlus, FaMinus, FaPaintBrush, FaFillDrip, FaUndo, FaEraser } from 'react-icons/fa'
 import { ChromePicker } from 'react-color'
 import LZString from 'lz-string'
+import socket from '../websocket/socket'
 
 
 class Canvas extends Component {
@@ -30,7 +31,19 @@ class Canvas extends Component {
     window.addEventListener("resize",
       () => {
         this.setState({ mobileLayout: ((window.innerWidth < 600) ? true : false)})
-   })
+    })
+    socket.on('messages', (messages) => {
+      console.log('room messages updated')
+      this.props.updateRoomMessages(messages.messages)
+    })
+    socket.on('error', (err) => {
+      this.props.error(`Failed to send message.`)
+    })
+  }
+
+  componentWillUnmount() {
+    socket.off('messages')
+    socket.off('error')
   }
 
   closeColorPicker = () => {
@@ -221,6 +234,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
   sendMessageToRoom: sendMessageToRoom,
+  updateRoomMessages: updateRoomMessages,
   success: success,
   error: error
 }
