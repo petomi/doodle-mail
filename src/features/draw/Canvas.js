@@ -5,7 +5,7 @@ import { sendMessageToRoom, updateRoomMessages } from '../rooms/roomSlice'
 import { success, error } from '../alerts/alertSlice'
 import CanvasDraw from 'react-canvas-draw'
 import { withRouter } from 'react-router-dom'
-import { FaPlus, FaMinus, FaPaintBrush, FaFillDrip, FaUndo, FaEraser } from 'react-icons/fa'
+import { FaPlus, FaMinus, FaPaintBrush, FaFillDrip, FaUndo, FaEraser, FaRegIdBadge } from 'react-icons/fa'
 import { ChromePicker } from 'react-color'
 import socket from '../websocket/socket'
 
@@ -123,6 +123,7 @@ class Canvas extends Component {
             backgroundColor={this.state.backgroundColor}
             brushColor={this.state.brushColor}
             brushRadius={this.state.brushRadius}
+            hideInterface={this.state.mobileLayout}
             alignSelf="center"
           />
           <SimpleGrid width={300} columns={3} spacingY="10px">

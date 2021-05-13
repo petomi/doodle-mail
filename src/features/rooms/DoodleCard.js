@@ -29,12 +29,13 @@ const DoodleCard = (props) => {
       <hr/>
       <Text>{props.message.title}</Text>
       <CanvasDraw
-        loadTimeOffset={10}
+        loadTimeOffset={5}
         canvasWidth={mobileLayout ? 300 : 600}
         canvasHeight={mobileLayout ? 300 : 600}
         disabled={true}
         hideGrid={true}
         saveData={decompressedImageData}
+        backgroundColor={props.message.background}
         style={{ margin: 'auto' }}
       />
     </Box>
