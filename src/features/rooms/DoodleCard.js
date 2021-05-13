@@ -29,6 +29,7 @@ const DoodleCard = (props) => {
       <hr/>
       <Text>{props.message.title}</Text>
       <CanvasDraw
+        loadTimeOffset={10}
         canvasWidth={mobileLayout ? 300 : 600}
         canvasHeight={mobileLayout ? 300 : 600}
         disabled={true}
