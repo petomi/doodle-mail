@@ -8,22 +8,41 @@ import home from './pages/Home'
 import join from './pages/Join'
 import room from './pages/Room'
 import draw from './pages/Draw'
-import { wakeDb } from './features/rooms/roomSlice'
+import { loadSavedSession, setRoomCode, setRoomData } from './features/rooms/roomSlice'
+import socket from './features/websocket/socket'
+import { success } from './features/alerts/alertSlice'
+import { useHistory } from "react-router-dom"
 
 function App() {
   const [backgroundColor, setBackgroundColor] = useState('#1565C0')
   const alerts = useSelector((state) => state.alerts.alerts)
   const dispatch = useDispatch()
   let location = useLocation()
-  // on app first load, call wakeDb to wake heroku backend
+  const history = useHistory()
+
+  // load any existing saved state on application load
   useEffect(() => {
-    dispatch(wakeDb())
+    dispatch(loadSavedSession())
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   // every time route updates, update background color to fit route
   useEffect(() => {
     setBackgroundColor(getRouteBackgroundColor(location.pathname))
   }, [location])
+  useEffect(() => {
+    socket.on('room:join', (room) => {
+      const roomData = room.room
+      const roomCode = roomData.entryCode
+      dispatch(setRoomCode(roomCode))
+      dispatch(setRoomData(roomData))
+      dispatch(success(`Joined room with room code ${roomData.entryCode}`))
+      history.push('/room')
+    })
+
+    return function cleanupListeners() {
+      socket.off('room:join')
+    }
+  })
   return (
     <div style={{ textAlign: 'center', minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: backgroundColor }}>
       <header>

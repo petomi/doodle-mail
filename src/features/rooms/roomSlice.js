@@ -1,99 +1,60 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import axios from 'axios'
+import socket from '../websocket/socket'
 
-// TODO: get base URL from .env file
-const baseUrl = 'https://doodle-mail-server.herokuapp.com'
-
-// eslint-disable-next-line no-empty-pattern
-export const wakeDb = createAsyncThunk('room/wake', async(thunkApi) => {
-  const response = await axios.get(`${baseUrl}/`)
-  if (response.status === 200) {
-    return
-  } else {
-    return thunkApi.rejectWithValue({
-      message: `Could not contact doodle-mail server.`
-    })
+// get previous session data from storage and connect if possible
+export const loadSavedSession = createAsyncThunk('session', async () => {
+  const roomCode = localStorage.getItem('roomCode')
+  const userName = localStorage.getItem('userName')
+  if (roomCode && userName) {
+    socket.auth = { userName: userName }
+    socket.connect()
+    // join room with current info
+    socket.emit('rooms:join', roomCode)
   }
+  return
 })
 
-// TODO: may not need this endpoint
-export const getRoomInfo = createAsyncThunk('room/getInfo', async ({roomCode}, thunkApi) => {
-  const response = await axios.get(`${baseUrl}/rooms/${roomCode}/info`)
-  if (response.status === 200) {
-    return response.data
-  } else {
-    return thunkApi.rejectWithValue({
-      message: response.data
-    })
-  }
+// set up calls out to server
+export const getRoomInfo = createAsyncThunk('room/getInfo', async ({roomCode}) => {
+  socket.emit('rooms:info', roomCode)
+  return
 })
 
-export const createRoom = createAsyncThunk('room/create', async ({userName}, thunkApi) => {
-  const response = await axios.post(`${baseUrl}/rooms`, { userName: userName })
-  if (response.status === 200) {
-    return response.data
-  } else {
-    return thunkApi.rejectWithValue({
-      message: response.data
-    })
-  }
+export const createRoom = createAsyncThunk('room/create', async ({userName}) => {
+  socket.auth = { userName: userName }
+  socket.connect() // TODO: only connect and set auth once for entire app
+  socket.emit('rooms:create')
+  return
 })
 
 // TODO: - write room and user data to localStorage, remove user from room when they close the app
-export const joinRoom = createAsyncThunk('room/join', async ({roomCode, userName}, thunkApi) => {
-  const response = await axios.post(`${baseUrl}/rooms/${roomCode}/join`, { userName: userName })
-  if (response.status === 200) {
-    return response.data
-  } else {
-    return thunkApi.rejectWithValue({
-      message: response.data
-    })
-  }
+export const joinRoom = createAsyncThunk('room/join', async ({roomCode, userName}) => {
+  socket.auth = { userName: userName }
+  socket.connect() // TODO: only connect and set auth once for entire app
+  socket.emit('rooms:join', roomCode)
+  return
 })
 
-export const leaveRoom = createAsyncThunk('room/leave', async ({roomCode, userName}, thunkApi) => {
-  const response = await axios.post(`${baseUrl}/rooms/${roomCode}/leave`, { userName: userName })
-  console.log(response)
-  if (response.status === 200) {
-    return response.data
-  } else {
-    return thunkApi.rejectWithValue({
-      message: response.data
-    })
-  }
+export const leaveRoom = createAsyncThunk('room/leave', async ({roomCode}) => {
+  socket.emit('rooms:leave', roomCode)
+  clearRoomData()
+  localStorage.removeItem('roomCode')
+  return
 })
 
-export const getRoomMessages = createAsyncThunk('room/getMessages', async ({roomId}, thunkApi) => {
-  const response = await axios.get(`${baseUrl}/rooms/${roomId}/messages`)
-  if (response.status === 200) {
-    return response.data
-  } else {
-    return thunkApi.rejectWithValue({
-      message: response.data
-    })
-  }
+export const getRoomMessages = createAsyncThunk('room/getMessages', async ({roomId}) => {
+  socket.emit('rooms:messages', roomId)
+  return
 })
 
-export const sendMessageToRoom = createAsyncThunk('room/sendMessage', async ({roomId, userName, messages}, thunkApi) => {
-  const response = await axios.post(`${baseUrl}/rooms/${roomId}/messages`, { userName: userName, messages: messages })
-  if (response.status === 200) {
-    return response.data
-  } else {
-    return thunkApi.rejectWithValue({
-      message: response.data
-    })
-  }
+export const sendMessageToRoom = createAsyncThunk('room/sendMessage', async ({roomId, messages}) => {
+  socket.emit('rooms:messages:send', roomId, messages)
+  return
 })
 
-export const deleteMessageFromRoom = createAsyncThunk('room/deleteMessage', async ({roomId, messageId}, thunkApi) => {
-  const response = await axios.post(`${baseUrl}/rooms/${roomId}/messages`, { messageId: messageId })
-  if (response.status === 200) {
-    return response.data
-  } else {
-    return thunkApi.rejectWithValue({
-      message: response.data
-    })
-  }
+export const deleteMessageFromRoom = createAsyncThunk('room/deleteMessage', async ({roomId, messageId}) => {
+  socket.emit('rooms:messages:delete', (messageId, roomId))
+  return
 })
 
 export const roomSlice = createSlice({
@@ -105,11 +66,22 @@ export const roomSlice = createSlice({
     roomData: {}
   },
   reducers: {
+    clearRoomData: (state) => {
+      state.roomCode = null
+      state.RoomData = {}
+    },
     setRoomCode: (state, roomCode) => {
       if (roomCode == null) {
         state.roomCode = null
       } else {
         state.roomCode = roomCode.payload
+      }
+    },
+    setRoomData: (state, roomData) => {
+      if (roomData == null) {
+        state.roomData = {}
+      } else {
+        state.roomData = roomData.payload
       }
     },
     setUserName: (state, name) => {
@@ -119,39 +91,22 @@ export const roomSlice = createSlice({
         state.userName = name.payload
       }
     },
+    updateRoomMessages: (state, messages) => {
+      if (messages.payload.length > 0) {
+        state.roomData.messages = messages.payload
+      }
+    },
     updateLastSyncDate: (state) => {
       state.lastSyncDate = new Date()
     }
-  },
-  extraReducers: builder => {
-    builder
-      .addCase(getRoomInfo.fulfilled, (state, action) => {
-        state.roomData = action.payload.room
-      })
-      .addCase(createRoom.fulfilled, (state, action) => {
-        state.roomCode = action.payload.room.entryCode
-        state.roomData = action.payload.room
-      })
-      .addCase(joinRoom.fulfilled, (state, action) => {
-        state.roomCode = action.payload.room.entryCode
-        state.roomData = action.payload.room
-      })
-      .addCase(leaveRoom.fulfilled, (state) => {
-        state.roomCode = null
-        state.roomData = {}
-      })
-      .addCase(getRoomMessages.fulfilled, (state, action) => {
-        state.roomData.messages = action.payload
-      })
-      .addCase(sendMessageToRoom.fulfilled, (state, action) => {
-        state.roomData.messages = action.payload
-      })
-      .addCase(deleteMessageFromRoom.fulfilled, (state, action) => {
-        state.roomData.messages = action.payload
-      })
   }
 })
 
-export const { setRoomCode, setUserName, updateLastSyncDate } = roomSlice.actions
+export const saveSessionData = (userName, roomCode) => {
+  localStorage.setItem('userName', userName)
+  localStorage.setItem('roomCode', roomCode)
+}
+
+export const { clearRoomData, setRoomCode, setRoomData, setUserName, updateRoomMessages } = roomSlice.actions
 
 export default roomSlice.reducer

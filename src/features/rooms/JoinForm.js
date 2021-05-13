@@ -1,53 +1,83 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Button, FormControl, FormLabel, Input, InputGroup, InputRightElement, Stack, Link } from '@chakra-ui/react'
 import { FaArrowRight } from 'react-icons/fa'
 import { useInput } from '../../hooks/useInput'
 import { useDispatch } from "react-redux"
-import { createRoom, joinRoom, setUserName } from './roomSlice'
+import { createRoom, joinRoom, setRoomCode, setRoomData, setUserName, saveSessionData } from './roomSlice'
 import { success, error } from '../alerts/alertSlice'
 import { useHistory } from "react-router-dom"
+import socket from '../websocket/socket'
 
 const JoinForm = () => {
   const { value:name, bind:bindName, reset:resetName } = useInput('')
-  const { value:room, bind:bindRoom, reset:resetRoom } = useInput('')
+  const { value:requestedRoom, bind:bindRoom, reset:resetRoom } = useInput('')
   const [formStage, setFormStage] = useState(1)
   const [textFieldFocused, setTextFieldFocused] = useState(false)
   const dispatch = useDispatch()
   const history = useHistory()
 
-  const handleSubmit = (evt) => {
-    // TODO: save room name in local storage and retrieve it from there on app load (if present)
-    evt.preventDefault()
-    if (room === '') {
-      dispatch(setUserName({userName: name}))
-      dispatch(createRoom({userName: name})).then((data) => {
-        if (data.type === 'room/create/fulfilled') {
-          const roomData = data.payload.room
-          dispatch(success(`Created room! Join with code: ${roomData.entryCode}`))
-          history.push('/room')
-        }
-        else {
-          dispatch(error(`Failed to create room!`))
-          resetName()
-          resetRoom()
-          setFormStage(1)
-        }
-      })
-    } else {
-      dispatch(setUserName({userName: name}))
-      dispatch(joinRoom({ roomCode: room, userName: name })).then((data) => {
-        if (data.type === 'room/join/fulfilled') {
-          const roomData = data.payload.room
-          dispatch(success(`Joined room ${roomData.entryCode}!`))
-          history.push('/room')
-        } else {
-          dispatch(error(`Failed to join room. Check your room code!`))
-          resetName()
-          resetRoom()
-          setFormStage(1)
-        }
-      })
+  useEffect(() => {
+    // web socket event handlers
+    socket.on('room:create', (room) => {
+      const roomData = room.room
+      const roomCode = roomData.entryCode
+      dispatch(setRoomCode(roomCode))
+      dispatch(setRoomData(roomData))
+      dispatch(success(`Created room! Join with code: ${roomData.entryCode}`))
+      saveSessionData(name, roomCode)
+      history.push('/room')
+    })
 
+    socket.on('room:join', (room) => {
+      const roomData = room.room
+      const roomCode = roomData.entryCode
+      dispatch(setRoomCode(roomCode))
+      dispatch(setRoomData(roomData))
+      dispatch(success(`Joined room with room code ${roomData.entryCode}`))
+      saveSessionData(name, roomCode)
+      history.push('/room')
+    })
+
+    socket.on('connect_error', (err) => {
+      if (err.message === 'invalid username') {
+        console.log('Invalid username selected. User already exists in room.')
+        dispatch(error(`Invalid username selected. User may already exist in room.`))
+      }
+      resetName()
+      resetRoom()
+      setFormStage(1)
+    });
+
+    socket.on('error', (err) => {
+      if (requestedRoom === '') {
+        dispatch(error(`Failed to create room!`))
+      } else {
+        dispatch(error(`Failed to join room. Check your room code!`))
+      }
+      resetName()
+      resetRoom()
+      setFormStage(1)
+    })
+
+    return function cleanupListeners () {
+      socket.off('room:create')
+      socket.off('connect_error')
+      socket.off('room:join')
+      socket.off('error')
+    }
+  })
+
+
+  // handle submitting form
+  const handleSubmit = (evt) => {
+    // TODO: save room name + userName in local storage and retrieve it from there on app load (if present)
+    evt.preventDefault()
+    dispatch(setUserName({userName: name}))
+    // if room is blank,  create one
+    if (requestedRoom === '') {
+      dispatch(createRoom({userName: name}))
+    } else {
+      dispatch(joinRoom({ roomCode: requestedRoom, userName: name }))
     }
   }
 
@@ -56,7 +86,6 @@ const JoinForm = () => {
   }
 
   const goToNextStage = () => {
-    // TODO: check if requested room exists? if not show error message?
     setFormStage(2)
   }
 
