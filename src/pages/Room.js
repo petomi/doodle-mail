@@ -62,7 +62,7 @@ export default function Room () {
   } else {
     return (
       <Center minHeight={['400px', '800px']}>
-        <Heading>Room does not exist.</Heading>
+        <Heading>Loading room data.</Heading>
       </Center>
     )
   }

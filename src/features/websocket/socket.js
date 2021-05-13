@@ -9,6 +9,7 @@ socket.onAny((event, ...args) => {
   console.log(event, args)
 })
 
+// log errors to console
 socket.on('error', (err) => {
   console.log(err)
 })

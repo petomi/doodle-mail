@@ -3,7 +3,7 @@ import { Button, FormControl, FormLabel, Input, InputGroup, InputRightElement, S
 import { FaArrowRight } from 'react-icons/fa'
 import { useInput } from '../../hooks/useInput'
 import { useDispatch } from "react-redux"
-import { createRoom, joinRoom, setRoomCode, setRoomData, setUserName } from './roomSlice'
+import { createRoom, joinRoom, setRoomCode, setRoomData, setUserName, saveSessionData } from './roomSlice'
 import { success, error } from '../alerts/alertSlice'
 import { useHistory } from "react-router-dom"
 import socket from '../websocket/socket'
@@ -24,6 +24,7 @@ const JoinForm = () => {
       dispatch(setRoomCode(roomCode))
       dispatch(setRoomData(roomData))
       dispatch(success(`Created room! Join with code: ${roomData.entryCode}`))
+      saveSessionData(name, roomCode)
       history.push('/room')
     })
 
@@ -33,6 +34,7 @@ const JoinForm = () => {
       dispatch(setRoomCode(roomCode))
       dispatch(setRoomData(roomData))
       dispatch(success(`Joined room with room code ${roomData.entryCode}`))
+      saveSessionData(name, roomCode)
       history.push('/room')
     })
 
