@@ -33,6 +33,7 @@ const DoodleCard = (props) => {
         canvasWidth={mobileLayout ? 300 : 600}
         canvasHeight={mobileLayout ? 300 : 600}
         disabled={true}
+        hideInterface={true}
         hideGrid={true}
         saveData={decompressedImageData}
         backgroundColor={props.message.background}
