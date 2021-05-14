@@ -44,6 +44,7 @@ export const joinRoom = createAsyncThunk('room/join', async ({roomCode, userName
 export const leaveRoom = createAsyncThunk('room/leave', async ({roomCode}) => {
   localStorage.removeItem('roomCode')
   clearRoomData()
+  setUserName()
   socket.emit('rooms:leave', roomCode)
   return
 })
@@ -75,6 +76,7 @@ export const roomSlice = createSlice({
     clearRoomData: (state) => {
       state.roomCode = null
       state.RoomData = {}
+      state.userName = null
     },
     setRoomCode: (state, roomCode) => {
       if (roomCode == null) {
@@ -91,11 +93,7 @@ export const roomSlice = createSlice({
       }
     },
     setUserName: (state, name) => {
-      if (name == null) {
-        state.userName = null
-      } else {
-        state.userName = name.payload
-      }
+      state.userName = name.payload.userName
     },
     updateRoomMessages: (state, messages) => {
       if (messages.payload.length > 0) {

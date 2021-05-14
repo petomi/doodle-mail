@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { Button, FormControl, FormLabel, Input, InputGroup, InputRightElement, Stack, Link } from '@chakra-ui/react'
 import { FaArrowRight } from 'react-icons/fa'
 import { useInput } from '../../hooks/useInput'
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { createRoom, joinRoom, setRoomCode, setRoomData, setUserName, saveSessionData } from './roomSlice'
 import { success, error } from '../alerts/alertSlice'
 import { useHistory } from "react-router-dom"
@@ -13,6 +13,7 @@ const JoinForm = () => {
   const { value:requestedRoom, bind:bindRoom, reset:resetRoom } = useInput('')
   const [formStage, setFormStage] = useState(1)
   const [textFieldFocused, setTextFieldFocused] = useState(false)
+  const userName = useSelector((state) => state.room.userName)
   const dispatch = useDispatch()
   const history = useHistory()
 
@@ -24,7 +25,7 @@ const JoinForm = () => {
       dispatch(setRoomCode(roomCode))
       dispatch(setRoomData(roomData))
       dispatch(success(`Created room! Join with code: ${roomData.entryCode}`))
-      saveSessionData(name, roomCode)
+      saveSessionData(userName, roomCode)
       history.push('/room')
     })
 
@@ -34,7 +35,7 @@ const JoinForm = () => {
       dispatch(setRoomCode(roomCode))
       dispatch(setRoomData(roomData))
       dispatch(success(`Joined room with room code ${roomData.entryCode}`))
-      saveSessionData(name, roomCode)
+      saveSessionData(userName, roomCode)
       history.push('/room')
     })
 
@@ -70,7 +71,6 @@ const JoinForm = () => {
 
   // handle submitting form
   const handleSubmit = (evt) => {
-    // TODO: save room name + userName in local storage and retrieve it from there on app load (if present)
     evt.preventDefault()
     dispatch(setUserName({userName: name}))
     // if room is blank,  create one
