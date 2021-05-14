@@ -1,6 +1,7 @@
 import { io } from 'socket.io-client'
 
-const URL = process.env.BASE_API_URL || 'https://doodle-mail-server.herokuapp.com/'
+// const URL = process.env.BASE_API_URL || 'https://doodle-mail-server.herokuapp.com/'
+const URL = 'http://localhost:5000/'
 
 const socket = io(URL, { autoConnect: false })
 
