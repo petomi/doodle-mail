@@ -123,7 +123,6 @@ class Canvas extends Component {
             backgroundColor={this.state.backgroundColor}
             brushColor={this.state.brushColor}
             brushRadius={this.state.brushRadius}
-            hideInterface={this.state.mobileLayout}
             alignSelf="center"
           />
           <SimpleGrid width={300} columns={3} spacingY="10px">
