@@ -5,8 +5,8 @@ import { sendMessageToRoom, updateRoomMessages } from '../rooms/roomSlice'
 import { success, error } from '../alerts/alertSlice'
 import CanvasDraw from 'react-canvas-draw'
 import { withRouter } from 'react-router-dom'
-import { FaPlus, FaMinus, FaPaintBrush, FaFillDrip, FaUndo, FaEraser } from 'react-icons/fa'
-import { ChromePicker } from 'react-color'
+import { FaPlus, FaMinus, FaPaintBrush, FaFillDrip, FaUndo, FaEraser, FaRegIdBadge } from 'react-icons/fa'
+import { CirclePicker } from 'react-color'
 import socket from '../websocket/socket'
 
 
@@ -123,6 +123,7 @@ class Canvas extends Component {
             backgroundColor={this.state.backgroundColor}
             brushColor={this.state.brushColor}
             brushRadius={this.state.brushRadius}
+            hideInterface={this.state.mobileLayout}
             alignSelf="center"
           />
           <SimpleGrid width={300} columns={3} spacingY="10px">
@@ -173,7 +174,8 @@ class Canvas extends Component {
                 <ModalCloseButton bg="white"/>
                 <ModalBody>
                   <Center>
-                    <ChromePicker
+                    <CirclePicker
+                      colors={["#000000", "#ffffff", "#f44336", "#e91e63", "#9c27b0", "#673ab7", "#3f51b5", "#2196f3", "#03a9f4", "#00bcd4", "#009688", "#4caf50", "#8bc34a", "#cddc39", "#ffeb3b", "#ffc107", "#ff9800", "#ff5722", "#795548", "#607d8b"]}
                       color={ this.state.colorPickerMode === 'background' ? this.state.backgroundColor : this.state.brushColor }
                       onChangeComplete={ (color) => {
                         if (this.state.colorPickerMode === 'background') {

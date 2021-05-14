@@ -21,6 +21,9 @@ export const getRoomInfo = createAsyncThunk('room/getInfo', async ({roomCode}) =
 })
 
 export const createRoom = createAsyncThunk('room/create', async ({userName}) => {
+  if(socket.connected) {
+    socket.disconnect()
+  }
   socket.auth = { userName: userName }
   socket.connect() // TODO: only connect and set auth once for entire app
   socket.emit('rooms:create')
@@ -29,6 +32,9 @@ export const createRoom = createAsyncThunk('room/create', async ({userName}) => 
 
 // TODO: - write room and user data to localStorage, remove user from room when they close the app
 export const joinRoom = createAsyncThunk('room/join', async ({roomCode, userName}) => {
+  if(socket.connected) {
+    socket.disconnect()
+  }
   socket.auth = { userName: userName }
   socket.connect() // TODO: only connect and set auth once for entire app
   socket.emit('rooms:join', roomCode)
@@ -36,9 +42,10 @@ export const joinRoom = createAsyncThunk('room/join', async ({roomCode, userName
 })
 
 export const leaveRoom = createAsyncThunk('room/leave', async ({roomCode}) => {
-  socket.emit('rooms:leave', roomCode)
-  clearRoomData()
   localStorage.removeItem('roomCode')
+  clearRoomData()
+  setUserName()
+  socket.emit('rooms:leave', roomCode)
   return
 })
 
@@ -69,6 +76,7 @@ export const roomSlice = createSlice({
     clearRoomData: (state) => {
       state.roomCode = null
       state.RoomData = {}
+      state.userName = null
     },
     setRoomCode: (state, roomCode) => {
       if (roomCode == null) {
@@ -85,11 +93,7 @@ export const roomSlice = createSlice({
       }
     },
     setUserName: (state, name) => {
-      if (name == null) {
-        state.userName = null
-      } else {
-        state.userName = name.payload
-      }
+      state.userName = name.payload.userName
     },
     updateRoomMessages: (state, messages) => {
       if (messages.payload.length > 0) {
