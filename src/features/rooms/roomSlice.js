@@ -25,18 +25,17 @@ export const createRoom = createAsyncThunk('room/create', async ({userName}) => 
     socket.disconnect()
   }
   socket.auth = { userName: userName }
-  socket.connect() // TODO: only connect and set auth once for entire app
+  socket.connect()
   socket.emit('rooms:create')
   return
 })
 
-// TODO: - write room and user data to localStorage, remove user from room when they close the app
 export const joinRoom = createAsyncThunk('room/join', async ({roomCode, userName}) => {
   if(socket.connected) {
     socket.disconnect()
   }
   socket.auth = { userName: userName }
-  socket.connect() // TODO: only connect and set auth once for entire app
+  socket.connect()
   socket.emit('rooms:join', roomCode)
   return
 })

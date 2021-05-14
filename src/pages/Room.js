@@ -27,12 +27,12 @@ export default function Room () {
     })
 
     socket.on('user:joined', (data) => {
-      // TODO: - set an alert/toast?
+      // TODO - set an alert/toast?
       console.log(data.message)
     })
 
     socket.on('user:left', (data) => {
-      // TODO: - set an alert/toast?
+      // TODO - set an alert/toast?
       console.log(data.message)
     })
 
@@ -70,7 +70,6 @@ export default function Room () {
 }
 
 const MessageRepeater = ({ messages }) => {
-  /* TODO add pagination */
   return messages.map((message, index) => {
     return (
       <DoodleCard message={message} key={index} />
